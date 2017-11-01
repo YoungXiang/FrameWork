@@ -1,0 +1,18 @@
+{
+  "rules":[
+    {
+      "ruleName": "MainScene",
+      "filterPath": "Assets/Res/_Scenes/Main.unity;Assets/Res/_Scenes/Main/*.*",
+      "ignorePath": "",
+      "assetBundleName": "scene/main.unity3d",
+      "isBuiltIn": true
+    },
+    {
+      "ruleName":"MainScene",
+      "filterPath":"Assets/Res/_Scenes/Main.unity;Assets/Res/_Scenes/Main/*.*",
+      "ignorePath":"",
+      "assetBundleName":"scene/main.unity3d",
+      "isBuiltIn":true
+    }
+  ]
+}

@@ -20,6 +20,10 @@ namespace FrameWork
         public override bool keepWaiting { get { return false; } }        
     }
 
+    /// <summary>
+    /// A generic async operation listener and wait.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class IAsyncRequest<T> : IAsyncRequestBase where T : AsyncOperation
     {
         public T asyncOp;
@@ -38,18 +42,37 @@ namespace FrameWork
         }
     }
 
+    /// <summary>
+    /// Asset bundle async operation request
+    /// </summary>
     public class AssetBundleAsyncRequest : IAsyncRequest<AssetBundleCreateRequest>
     {
     }
 
+    /// <summary>
+    /// Asset async operation request
+    /// </summary>
     public class AssetAsyncRequest : IAsyncRequest<AssetBundleRequest>
     {
     }
 
-    // TODO : Scene Load Op
+    /// <summary>
+    /// Scene async operation request
+    /// </summary>
     public class SceneAsyncRequest : IAsyncRequest<AsyncOperation>
     {
-
+        public override bool keepWaiting
+        {
+            get
+            {
+                if (asyncOp != null)
+                {
+                    if (listener != null) listener(this);
+                    return !asyncOp.isDone;
+                }
+                return false;
+            }
+        }
     }
 
     public class FakeAsyncOp : AsyncOperation
@@ -79,6 +102,7 @@ namespace FrameWork
     }
 
     #region WWW 
+    [Obsolete("This class uses unity's WWW class, which is slow and problematic.")]
     public class WWWRequest : IAsyncRequestBase
     {
         public WWW www;
@@ -104,6 +128,9 @@ namespace FrameWork
         }
     }
 
+    /// <summary>
+    /// Advanced WWW request using WebClient.
+    /// </summary>
     public class AWWWRequest : IAsyncRequestBase
     {
         public AWWW aw;

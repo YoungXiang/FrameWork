@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FrameWork
 {
     internal class LowLevelLoader_Editor : ILowLevelLoader
     {
+        #region Bundle Load
         public AssetBundleReference LoadBundleInternal(AssetBundleConfig config)
         {
             Debug.Log("[Loader]: Loading AssetBundle : " + config.bundlePath);
@@ -55,6 +57,7 @@ namespace FrameWork
 
             return request;
         }
+        #endregion
 
         #region Asset Async
         public IAsyncRequestBase LoadAssetAsyncInternal<T>(AssetBundleReference abRef, string assetPath, AssetAsyncCallback<T> callback) where T : UnityEngine.Object
@@ -69,6 +72,24 @@ namespace FrameWork
 #endif
             };
             return request;           
+        }
+        #endregion
+
+        #region Scene Load
+        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath)
+        {
+            SceneAsyncRequest request = new SceneAsyncRequest();
+            request.id = scenePath.GetHashCode();
+            request.beginRequest += () => {
+                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                request.asyncOp.allowSceneActivation = false;
+            };
+            request.endRequest += () => 
+            {
+                request.asyncOp.allowSceneActivation = true;
+            };
+            
+            return request;
         }
         #endregion
     }

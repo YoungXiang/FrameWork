@@ -20,5 +20,9 @@ namespace FrameWork
         IAsyncRequestBase LoadAssetAsyncInternal<T>(AssetBundleReference abRef, string assetPath, AssetAsyncCallback<T> callback) where T : UnityEngine.Object;
         //IAsyncRequestBase LoadAssetWWWOrCacheInternal<T>(AssetBundleReference abRef, string assetPath, AssetAsyncCallback<T> callback) where T : UnityEngine.Object;
         #endregion
+
+        #region Scene load
+        IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath);
+        #endregion
     }
 }

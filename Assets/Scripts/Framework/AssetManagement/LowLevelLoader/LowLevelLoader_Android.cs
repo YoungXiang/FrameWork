@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FrameWork
 {
@@ -61,6 +62,26 @@ namespace FrameWork
             };
             request.endRequest += () => { callback(request.asyncOp.asset as T); };
             return request;           
+        }
+        #endregion
+
+
+        #region Scene Load
+        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath)
+        {
+            SceneAsyncRequest request = new SceneAsyncRequest();
+            request.id = scenePath.GetHashCode();
+            request.beginRequest += () =>
+            {
+                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                request.asyncOp.allowSceneActivation = false;
+            };
+            request.endRequest += () =>
+            {
+                request.asyncOp.allowSceneActivation = true;
+            };
+
+            return request;
         }
         #endregion
     }

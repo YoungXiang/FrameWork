@@ -3,91 +3,101 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class BuildManager : Singleton<BuildManager>
+namespace FrameWork
 {
-    public BuildRuleParser parser;
-    public string assetBundleOutputPath;
-    public string serverAssetBundleOutputPath = "AssetBundleServer/";
-
-    public bool isReady
+    public class BuildManager : Singleton<BuildManager>
     {
-        get { return !isDirty && (parser != null && parser.parsedList.Count > 0); }
-    }
-    
-    /// <summary>
-    /// Is assets dirty or not? If true, then assets need rebuild
-    /// </summary>
-    public bool isDirty;
-    public void SetDirty()
-    {
-        isDirty = true;
-    }
+        public BuildRuleParser parser;
+        public string assetBundleOutputPath;
+        public string serverAssetBundleOutputPath = "AssetBundleServer/";
 
-    public void SetAssetbundleOutputPath(string abOutPath)
-    {
-        assetBundleOutputPath = abOutPath;
-    }
-
-    public void LoadRules(string path)
-    {
-        parser = new BuildRuleParser();
-        parser.Parse(path);
-    }
-
-    public void BuildAssets()
-    {
-        PreBuildAsset();
-
-        // Build Assets
-        AssetBundleBuild[] buildMap = new AssetBundleBuild[parser.parsedList.Count];
-        for (int i = 0; i < buildMap.Length; i++)
+        public bool isReady
         {
-            buildMap[i].assetBundleName = parser.parsedList[i].assetBundleName;
-            buildMap[i].assetNames = parser.parsedList[i].assetFiles;
+            get { return !isDirty && (parser != null && parser.parsedList.Count > 0); }
         }
 
-        BuildPipeline.BuildAssetBundles(assetBundleOutputPath, buildMap, 
-            BuildAssetBundleOptions.ChunkBasedCompression, 
-            GetBuildTarget());
+        /// <summary>
+        /// Is assets dirty or not? If true, then assets need rebuild
+        /// </summary>
+        public bool isDirty
+        {
+            get
+            {
+                return EditorPrefs.GetBool("AssetDirty", false);
+            }
+        }
 
-        PostBuildAsset();
-        isDirty = false;
-    }
+        public void SetDirty(bool dirty)
+        {
+            EditorPrefs.SetBool("AssetDirty", dirty);
+        }
+        
+        public void SetAssetbundleOutputPath(string abOutPath)
+        {
+            assetBundleOutputPath = abOutPath;
+        }
 
-    public void BuildAssetsForSimulation()
-    {
-        isDirty = false;
-    }
+        public void LoadRules(string path)
+        {
+            parser = new BuildRuleParser();
+            parser.Parse(path);
+        }
 
-    public void BuildPlayer()
-    {
+        public void BuildAssets()
+        {
+            PreBuildAsset();
 
-    }
+            // Build Assets
+            AssetBundleBuild[] buildMap = new AssetBundleBuild[parser.parsedList.Count];
+            for (int i = 0; i < buildMap.Length; i++)
+            {
+                buildMap[i].assetBundleName = parser.parsedList[i].assetBundleName;
+                buildMap[i].assetNames = parser.parsedList[i].assetFiles;
+            }
 
-    #region Privates
-    void PreBuildAsset()
-    {
+            BuildPipeline.BuildAssetBundles(assetBundleOutputPath, buildMap,
+                BuildAssetBundleOptions.ChunkBasedCompression,
+                GetBuildTarget());
 
-    }
+            PostBuildAsset();
+            SetDirty(false);
+        }
 
-    void PostBuildAsset()
-    {
+        public void BuildAssetsForSimulation()
+        {
+            SetDirty(false);
+        }
 
-    }
-    #endregion
+        public void BuildPlayer()
+        {
 
-    public static BuildTarget GetBuildTarget()
-    {
+        }
+
+        #region Privates
+        void PreBuildAsset()
+        {
+
+        }
+
+        void PostBuildAsset()
+        {
+
+        }
+        #endregion
+
+        public static BuildTarget GetBuildTarget()
+        {
 #if UNITY_ANDROID
         return BuildTarget.Android;
 #elif UNITY_IOS
         return BuildTarget.iOS;
 #elif UNITY_STANDALONE
-        return BuildTarget.StandaloneWindows64;
+            return BuildTarget.StandaloneWindows64;
 #elif UNITY_STANDALONE_OSX
         return BuildTarget.StandaloneOSXIntel64;
 #else
         return BuildTarget.StandaloneWindows64;	
 #endif
+        }
     }
 }

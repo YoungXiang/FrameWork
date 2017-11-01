@@ -211,6 +211,10 @@ namespace FrameWork
 #else
             T asset = abRef.bundle.LoadAsset<T>(assetPath);
 #endif
+
+            // Add the bundle reference here.
+            BindAssetToAssetBundleRef(asset.GetInstanceID(), bundleHash);
+
             return asset;
         }
 
@@ -232,6 +236,7 @@ namespace FrameWork
             {
                 if (asset != null)
                 {
+                    // Add the bundle reference here.
                     BindAssetToAssetBundleRef(asset.GetInstanceID(), bundleHash);
                     callback(asset);
                 }
@@ -261,6 +266,33 @@ namespace FrameWork
                 }
             }));
         }
+
+        internal AsyncOperation LoadSceneAysnc(string scenePath)
+        {
+            coroutiner.NewLoadingQueue();
+            int bundleHash = manifest.GetBundleHashByAssetPath(scenePath);
+            TryLoadBundle(bundleHash, true);
+
+            AssetBundleReference abRef = assetBundles[bundleHash];
+            if (abRef.bundle == null)
+            {
+                // create a wait 
+                WaitForAssetBundleComplete wait = new WaitForAssetBundleComplete(abRef);
+                coroutiner.WaitForLoad(wait);
+            }
+
+            // there is no asset to load, so no asset to bind, just add the ref
+            AddBundleRefInternal(bundleHash);
+            SceneAsyncRequest sar = loader.LoadSceneAsyncInternal(abRef, scenePath) as SceneAsyncRequest;
+            coroutiner.WaitForLoad(sar);
+            return sar.asyncOp;
+        }
+
+        internal void UnloadSceneAsync(string scenePath)
+        {
+            int bundleHash = manifest.GetBundleHashByAssetPath(scenePath);
+            RemoveBundleRefInternal(bundleHash);
+        }
         #endregion
 
         #region Ref & Un Ref
@@ -282,13 +314,20 @@ namespace FrameWork
                 // record asset instance - asset bundle 
                 if (!instance2BundleBind.ContainsKey(instanceID))
                     instance2BundleBind.Add(instanceID, bundleHash);
-                
+
                 // add ref
-                AddRefInternal(bundleHash);
+                AddBundleRefInternal(bundleHash);
             }
         }
+        
+        // Remove Assetbundle ref by asset instanceID
+        internal void RemoveAssetRefToAssetBundle(int instanceID)
+        {
+            int bundleHash = GetBundleHash(instanceID);
+            RemoveBundleRefInternal(bundleHash);
+        }
 
-        internal void AddRefInternal(int bundleHash)
+        internal void AddBundleRefInternal(int bundleHash)
         {
             AssetBundleReference abRef = assetBundles[bundleHash];
             abRef.AddRef();
@@ -299,16 +338,9 @@ namespace FrameWork
             {
                 for (int i = 0; i < bConf.dependencies.Length; i++)
                 {
-                    AddRefInternal(bConf.dependencies[i]);
+                    AddBundleRefInternal(bConf.dependencies[i]);
                 }
             }
-        }
-
-        // Remove Assetbundle ref by asset instanceID
-        internal void RemoveRefInternal(int instanceID)
-        {
-            int bundleHash = GetBundleHash(instanceID);
-            RemoveBundleRefInternal(bundleHash);
         }
 
         internal void RemoveBundleRefInternal(int bundleHash)
