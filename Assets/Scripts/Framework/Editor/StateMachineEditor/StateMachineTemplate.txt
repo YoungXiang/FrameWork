@@ -1,0 +1,24 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using FrameWork;
+
+public class @StateMachineName : MonoStateMachine 
+{
+	///
+	/// initialState is set in Start()
+	///
+    public override string initialStateName { get { return "@DefaultStateName"; } }
+
+	///
+	/// Use this for Initialization
+	///
+    public override void Awake()
+	{
+		// Register all states.
+		RegisterState(new @StateName());
+
+		// Use MonoStateMachine.DispatchStateChange("GameObjectName", "StateName"); to change state.
+	}
+}
