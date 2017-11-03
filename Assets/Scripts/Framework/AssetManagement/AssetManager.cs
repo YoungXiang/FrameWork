@@ -118,15 +118,25 @@ namespace FrameWork
             });
         }
 
-        // for scene loading, provide only async operations
-        public static AsyncOperation LoadScene(string path)
+        /// <summary>
+        /// for scene loading, provide only async operations
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="unloadPrevious">if true then will unload the previous unity scene, this is used for loading -> main</param>
+        public static AsyncOperation LoadScene(string path, bool unloadPrevious = false)
         {
-            return s_loader.LoadSceneAysnc(path);
+            return s_loader.LoadSceneAysnc(path, unloadPrevious);
         }
 
         public static void UnloadScene(string path)
         {
             s_loader.UnloadSceneAsync(path);
+        }
+
+        /// Listener for async loading
+        public static void AddListenerForAsset(string assetPath, AsyncRequestListener listener)
+        {
+            s_loader.coroutiner.AddListener(assetPath.GetHashCode(), listener);
         }
         #endregion
     }

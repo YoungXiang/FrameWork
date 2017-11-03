@@ -2,16 +2,16 @@
   "rules":[
     {
       "ruleName": "MainScene",
-      "filterPath": "Assets/Res/_Scenes/Main.unity;Assets/Res/_Scenes/Main/*.*",
+      "filterPath": "Assets/Res/_Scenes/MainScene.unity",
       "ignorePath": "",
-      "assetBundleName": "scene/main.unity3d",
+      "assetBundleName": "scene/mainscene.unity3d",
       "isBuiltIn": true
     },
     {
-      "ruleName":"MainScene",
-      "filterPath":"Assets/Res/_Scenes/Main.unity;Assets/Res/_Scenes/Main/*.*",
+      "ruleName":"UI-ICon",
+      "filterPath":"Assets/Res/UI/*.*",
       "ignorePath":"",
-      "assetBundleName":"scene/main.unity3d",
+      "assetBundleName":"ui/icon/{rootFolder}[1].unity3d",
       "isBuiltIn":true
     }
   ]

@@ -17,7 +17,7 @@ namespace FrameWork
     {
         #region 路径配置
         // 内置AB路径
-        public static readonly string builtInAssetBundlePath = Application.streamingAssetsPath + "/AssetBundle/" + GetPlatformStringShort() + "/Res/";
+        public static readonly string builtInAssetBundlePath = Application.streamingAssetsPath + "/AssetBundle/" + GetPlatformStringShort() + "/";
         // 配置下载路径
         public static readonly string localConfigSavePath = Path.Combine(Application.persistentDataPath, GetPlatformStringShort());
 

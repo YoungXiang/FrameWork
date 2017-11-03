@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+#define SIMULATION
+#endif
+
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -267,7 +271,7 @@ namespace FrameWork
             }));
         }
 
-        internal AsyncOperation LoadSceneAysnc(string scenePath)
+        internal AsyncOperation LoadSceneAysnc(string scenePath, bool unloadPrevious = false)
         {
             coroutiner.NewLoadingQueue();
             int bundleHash = manifest.GetBundleHashByAssetPath(scenePath);
@@ -283,7 +287,7 @@ namespace FrameWork
 
             // there is no asset to load, so no asset to bind, just add the ref
             AddBundleRefInternal(bundleHash);
-            SceneAsyncRequest sar = loader.LoadSceneAsyncInternal(abRef, scenePath) as SceneAsyncRequest;
+            SceneAsyncRequest sar = loader.LoadSceneAsyncInternal(abRef, scenePath, unloadPrevious) as SceneAsyncRequest;
             coroutiner.WaitForLoad(sar);
             return sar.asyncOp;
         }

@@ -67,13 +67,13 @@ namespace FrameWork
 
 
         #region Scene Load
-        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath)
+        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath, bool unloadPrevious)
         {
             SceneAsyncRequest request = new SceneAsyncRequest();
             request.id = scenePath.GetHashCode();
             request.beginRequest += () =>
             {
-                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, unloadPrevious ? LoadSceneMode.Single : LoadSceneMode.Additive);
                 request.asyncOp.allowSceneActivation = false;
             };
             request.endRequest += () =>

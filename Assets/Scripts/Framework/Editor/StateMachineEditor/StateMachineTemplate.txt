@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using FrameWork;
 
-public class @StateMachineName : MonoStateMachine 
+public class @StateMachineName : @StateMachineClassType 
 {
 	///
 	/// initialState is set in Start()

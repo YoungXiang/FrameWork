@@ -75,12 +75,13 @@ namespace FrameWork
         {
             if (currentLoadingScene != null)
             {
+                currentLoadingScene.Update();
                 float progress = currentLoadingScene.progress;
                 if (currentTransition != null)
                 {
                     currentTransition.UpdateTransition(progress);
                 }
-
+                
                 if (progress >= 1)
                 {
                     currentLoadingScene.OnLoaded();

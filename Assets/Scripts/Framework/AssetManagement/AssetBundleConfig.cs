@@ -33,7 +33,7 @@ namespace FrameWork
     }
 
     [System.Serializable]
-    internal class AssetBundleConfig
+    public sealed class AssetBundleConfig
     {
         // or bundle name
         public string bundlePath;
@@ -63,7 +63,7 @@ namespace FrameWork
     }
 
     [System.Serializable]
-    internal class AssetBundleManifestNew
+    public sealed class AssetBundleManifestNew
     {
         public Dictionary<int, AssetBundleConfig> assetBundleConfig;
 

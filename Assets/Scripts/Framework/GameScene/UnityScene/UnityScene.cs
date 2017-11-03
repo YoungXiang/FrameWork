@@ -8,31 +8,33 @@ namespace FrameWork
 {
     public class UnityScene : BaseScene
     {
-        protected AsyncOperation loadOperation;
+        protected float _progress = 0.0f;
         public override float progress
         {
             get
             {
-                if (loadOperation != null)
-                {
-                    //if (loadOperation.progress >= 0.9f)
-                    //{
-                    //    loadOperation.allowSceneActivation = true;
-                    //}
-                    return loadOperation.progress;
-                }
-
-                return 0.0f;
+                return _progress;
             }
         }
         
         public override void Load()
         {
-            loadOperation = AssetManager.LoadScene(path);
-            //loadOperation.allowSceneActivation = false;
+            AssetManager.AddListenerForAsset(path, (IAsyncRequestBase request) => 
+            {
+                SceneAsyncRequest sr = request as SceneAsyncRequest;
+                if (sr != null && sr.asyncOp != null)
+                {
+                    _progress = sr.asyncOp.progress;
+                    if (sr.asyncOp.progress >= 0.9f)
+                    {
+                        _progress = 1.0f;
+                    }
+                }
+            });
+            AssetManager.LoadScene(path);
         }
-        
-        public override void Unload()
+
+        public sealed override void Unload()
         {
             OnBeforeUnload();
             AssetManager.UnloadScene(path);

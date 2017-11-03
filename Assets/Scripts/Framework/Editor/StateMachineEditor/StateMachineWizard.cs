@@ -5,15 +5,22 @@ using UnityEditor;
 
 namespace FrameWork
 {
-
     public class StateMachineWizard : ScriptableWizard
     {
+        public enum EStateMachineClassType
+        {
+            StateMachine,
+            MonoStateMachine,
+            UIStateMachine
+        };
+
         [MenuItem("FrameWork/Tool/StateMachine")]
         static void CreateWizard()
         {
             DisplayWizard<StateMachineWizard>("New StateMachine", "Create");
         }
-        
+
+        public EStateMachineClassType stateMachineType = EStateMachineClassType.UIStateMachine;
         public string stateMachineName;
         public string defaultState;
         public List<string> states;
@@ -76,7 +83,7 @@ namespace FrameWork
                 }
                 else
                 {
-                    newLines.Add(lines[i].Replace("@StateMachineName", stateMachineName).Replace("@DefaultStateName", defaultState));
+                    newLines.Add(lines[i].Replace("@StateMachineName", stateMachineName).Replace("@DefaultStateName", defaultState).Replace("@StateMachineClassType", stateMachineType.ToString()));
                 }
             }
             File.WriteAllLines(string.Format("{0}/{1}.cs", folder, stateMachineName), newLines.ToArray());

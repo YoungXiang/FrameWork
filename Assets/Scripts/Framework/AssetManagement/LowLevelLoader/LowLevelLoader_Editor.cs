@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +8,25 @@ namespace FrameWork
 {
     internal class LowLevelLoader_Editor : ILowLevelLoader
     {
+        readonly string fakeBundlePath = "Assets/Scripts/Framework/AssetManagement/LowLevelLoader/fake.unity3d";
+
         #region Bundle Load
         public AssetBundleReference LoadBundleInternal(AssetBundleConfig config)
         {
             Debug.Log("[Loader]: Loading AssetBundle : " + config.bundlePath);
 
+            string bundlePath = Path.Combine(AssetUtils.builtInAssetBundlePath, config.bundlePath);
+
             AssetBundleReference abRef = new AssetBundleReference();
-            abRef.bundle = AssetBundle.LoadFromFile(AssetUtils.builtInAssetBundlePath + config.bundlePath);
+            if (File.Exists(bundlePath))
+            {
+                abRef.bundle = AssetBundle.LoadFromFile(bundlePath);
+            }
+            else
+            {
+                Debug.Log("[Loader]: Bundle not exists[SimulationMode]");
+                abRef.bundle = AssetBundle.LoadFromFile(fakeBundlePath);
+            }
 
             return abRef; 
         }
@@ -25,8 +37,17 @@ namespace FrameWork
             request.id = config.hashCode;
             request.beginRequest = () =>
             {
+                string bundlePath = Path.Combine(AssetUtils.builtInAssetBundlePath, config.bundlePath);
                 Debug.Log("[Loader]: Loading AssetBundle Async : " + config.bundlePath);
-                request.asyncOp = AssetBundle.LoadFromFileAsync(AssetUtils.builtInAssetBundlePath + config.bundlePath);
+                if (File.Exists(bundlePath))
+                {
+                    request.asyncOp = AssetBundle.LoadFromFileAsync(bundlePath);
+                }
+                else
+                {
+                    Debug.Log("[Loader]: Bundle not exists[SimulationMode]");
+                    request.asyncOp = AssetBundle.LoadFromFileAsync(fakeBundlePath);
+                }
             };
             request.endRequest = () => 
             {
@@ -76,12 +97,12 @@ namespace FrameWork
         #endregion
 
         #region Scene Load
-        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath)
+        public IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath, bool unloadPrevious)
         {
             SceneAsyncRequest request = new SceneAsyncRequest();
             request.id = scenePath.GetHashCode();
             request.beginRequest += () => {
-                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                request.asyncOp = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(scenePath, unloadPrevious ? LoadSceneMode.Single : LoadSceneMode.Additive);
                 request.asyncOp.allowSceneActivation = false;
             };
             request.endRequest += () => 

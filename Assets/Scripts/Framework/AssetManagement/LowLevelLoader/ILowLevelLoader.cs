@@ -22,7 +22,7 @@ namespace FrameWork
         #endregion
 
         #region Scene load
-        IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath);
+        IAsyncRequestBase LoadSceneAsyncInternal(AssetBundleReference abRef, string scenePath, bool unloadPrevious);
         #endregion
     }
 }

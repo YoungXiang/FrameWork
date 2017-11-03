@@ -68,7 +68,8 @@ namespace FrameWork
                 if (asyncOp != null)
                 {
                     if (listener != null) listener(this);
-                    return !asyncOp.isDone;
+                    
+                    return asyncOp.progress < 0.9f;
                 }
                 return false;
             }
@@ -98,7 +99,13 @@ namespace FrameWork
             bundleReference = bundleRef;
         }
 
-        public override bool keepWaiting { get { return bundleReference.bundle == null; } }
+        public override bool keepWaiting
+        {
+            get
+            {
+                return bundleReference.bundle == null;
+            }
+        }
     }
 
     #region WWW 
