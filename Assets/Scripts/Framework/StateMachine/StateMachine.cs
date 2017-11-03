@@ -19,9 +19,9 @@ namespace FrameWork
         public IState currentState = null;
 
         public virtual string name { get { return "StateMachine"; } }
-        public virtual string initialStateName { get { return null; } }
+        public virtual string initialStateName { get; protected set; }
 
-        public virtual void OnInit() { if (!string.IsNullOrEmpty(initialStateName)) ChangeState(initialStateName); }
+        public virtual void OnInit() { if (currentState == null && !string.IsNullOrEmpty(initialStateName)) ChangeState(initialStateName); }
         public virtual void OnUpdate()
         {
             if (currentState != null)

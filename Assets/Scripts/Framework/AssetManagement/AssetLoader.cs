@@ -354,14 +354,16 @@ namespace FrameWork
                 AssetBundleReference abRef = assetBundles[bundleHash];
                 abRef.RemoveRef();
 
+                AssetBundleConfig bConf = manifest.GetBundleConfig(bundleHash);
+
                 if (abRef.refCount <= 0)
                 {
+                    Debug.LogFormat("Asset bundle is unloaded. [{0}] ", bConf.bundlePath);
                     abRef.Unload();
                     assetBundles.Remove(bundleHash);    // this bundle is now released
                 }
 
                 // remove dependencies references
-                AssetBundleConfig bConf = manifest.GetBundleConfig(bundleHash);
                 if (bConf != null && bConf.dependencies != null && bConf.dependencies.Length > 0)
                 {
                     for (int i = 0; i < bConf.dependencies.Length; i++)

@@ -3,16 +3,18 @@
     {
       "ruleName": "MainScene",
       "filterPath": "Assets/Res/_Scenes/MainScene.unity",
+      "includePath": "",
       "ignorePath": "",
       "assetBundleName": "scene/mainscene.unity3d",
       "isBuiltIn": true
     },
     {
-      "ruleName":"UI-ICon",
-      "filterPath":"Assets/Res/UI/*.*",
-      "ignorePath":"",
-      "assetBundleName":"ui/icon/{rootFolder}[1].unity3d",
-      "isBuiltIn":true
+      "ruleName": "UI-Prefabs",
+      "filterPath": "Assets/Res/UI/Prefabs/{fileName}.*",
+      "includePath": "Assets/Res/UI/Textures/{fileName}/*.*",
+      "ignorePath": "",
+      "assetBundleName": "ui/icon/{fileName}.unity3d",
+      "isBuiltIn": true
     }
   ]
 }

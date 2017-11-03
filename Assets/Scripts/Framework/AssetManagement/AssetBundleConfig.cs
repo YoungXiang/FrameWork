@@ -27,8 +27,13 @@ namespace FrameWork
 
         public void Unload()
         {
+#if UNITY_EDITOR
+            if (bundle != null)
+#endif
             bundle.Unload(true);
-            Debug.Log("Asset bundle is unloaded.");
+#if UNITY_EDITOR
+            bundle = null;
+#endif
         }
     }
 

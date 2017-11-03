@@ -9,6 +9,14 @@ namespace FrameWork
     internal class LowLevelLoader_Editor : ILowLevelLoader
     {
         readonly string fakeBundlePath = "Assets/Scripts/Framework/AssetManagement/LowLevelLoader/fake.unity3d";
+        AssetBundle fakeBundle;
+        void TryUnloadFakeBundle()
+        {
+            if (fakeBundle != null)
+            {
+                fakeBundle.Unload(true);
+            }
+        }
 
         #region Bundle Load
         public AssetBundleReference LoadBundleInternal(AssetBundleConfig config)
@@ -25,7 +33,9 @@ namespace FrameWork
             else
             {
                 Debug.Log("[Loader]: Bundle not exists[SimulationMode]");
+                TryUnloadFakeBundle();
                 abRef.bundle = AssetBundle.LoadFromFile(fakeBundlePath);
+                fakeBundle = abRef.bundle;
             }
 
             return abRef; 
@@ -45,12 +55,14 @@ namespace FrameWork
                 }
                 else
                 {
+                    TryUnloadFakeBundle();
                     Debug.Log("[Loader]: Bundle not exists[SimulationMode]");
                     request.asyncOp = AssetBundle.LoadFromFileAsync(fakeBundlePath);
                 }
             };
-            request.endRequest = () => 
+            request.endRequest = () =>
             {
+                fakeBundle = request.asyncOp.assetBundle;
                 callback(request.asyncOp.assetBundle);
             };
 

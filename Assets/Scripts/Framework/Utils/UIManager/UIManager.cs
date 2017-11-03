@@ -14,7 +14,7 @@ public class UILayer
 
 public class UIManager : SingleBehaviour<UIManager>
 {
-    internal string PrefabUrl = "Assets/Res/Prefabs/UI/{0}.prefab";
+    internal string PrefabUrl = "Assets/Res/UI/Prefabs/{0}.prefab";
     
     #region Engine Callbacks
     void Awake()
@@ -121,6 +121,8 @@ public class UIManager : SingleBehaviour<UIManager>
         if (!uiStates.ContainsKey(uiStateName))
         {
             GameObject go = AssetManager.LoadPrefab(string.Format(PrefabUrl, uiStateName));
+            // ensures that go has the same name as uiStateName
+            go.name = uiStateName;
             UIStateMachine uiState = go.GetComponent<UIStateMachine>();
             if (uiState == null)
             {
@@ -150,11 +152,38 @@ public class UIManager : SingleBehaviour<UIManager>
         }
 
         uiStates[uiStateName].transform.SetParent(uiLayers[layer].transform, false);
-        if (uiStates[uiStateName].bringToFirst) uiStates[uiStateName].transform.SetAsFirstSibling();
-        else uiStates[uiStateName].transform.SetSiblingIndex(uiStates[uiStateName].sortingOrder);
+        if (uiStates[uiStateName].bringToFirst)
+            uiStates[uiStateName].transform.SetAsFirstSibling();
+        else
+        {
+            uiStates[uiStateName].transform.SetSiblingIndex(uiStates[uiStateName].sortingOrder);
+            if (uiLayers[layer].transform.childCount > 1) SortSibling(layer);
+        }
 
         if (!string.IsNullOrEmpty(showState))
             uiStates[uiStateName].ChangeState(showState);
+    }
+
+    void SortSibling(int layer)
+    {
+        int childCount = uiLayers[layer].transform.childCount;
+        List<string> uiStateNames = new List<string>(childCount);
+        for (int i = 0; i < childCount; i++)
+        {
+            uiStateNames.Add(uiLayers[layer].transform.GetChild(i).name);
+        }
+
+        // return 1 if a > b;
+        //       -1 if a < b;
+        uiStateNames.Sort((string a, string b) => 
+        {
+            return uiStates[a].sortingOrder - uiStates[b].sortingOrder;
+        });
+
+        for (int i = 0; i < childCount; i++)
+        {
+            uiStates[uiStateNames[i]].transform.SetSiblingIndex(childCount - i);
+        }
     }
 
     public void Hide(string uiStateName, string hideState)

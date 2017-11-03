@@ -159,6 +159,7 @@ namespace FrameWork
         {
             var binFormatter = new BinaryFormatter();
             var memStream = new MemoryStream();
+            //binFormatter.Binder = AssemblyBinder.binder;
             binFormatter.Serialize(memStream, obj);
 
             //This gives you the byte array.

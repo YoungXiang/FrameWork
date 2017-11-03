@@ -10,7 +10,11 @@ namespace FrameWork
     public class BuildRule
     {
         public string ruleName;
+        // the main filter path, doesn't allow multi pathes
         public string filterPath;
+        // the path should be patch into filterPath
+        public string includePath;
+        // the path should be ignored
         public string ignorePath;
 
         public string assetBundleName;
@@ -52,161 +56,185 @@ namespace FrameWork
             for (int p = 0; p < parsedList.Count; p++)
             {
                 parsedList[p].assetBundleName = parsedList[p].assetBundleName.ToLower();
-                //LogUtil.LogColor(LogUtil.Color.yellow, "AssetBundleName : [{0}]", parsed.assetBundleName);
+                LogUtil.LogColor(LogUtil.Color.yellow, "AssetBundleName : [{0}]", parsedList[p].assetBundleName);
                 for (int i = 0; i < parsedList[p].assetFiles.Length; i++)
                 {
-                    //Debug.LogFormat("AssetFiles : {0}", parsed.assetFiles[i]);
                     parsedList[p].assetFiles[i] = parsedList[p].assetFiles[i].Replace("\\", "/").ToLower();
+                    Debug.LogFormat("AssetFiles : {0}", parsedList[p].assetFiles[i]);
                 }
             }
         }
 
+        string[] GetFiles(string path)
+        {
+            string pattern = "*.*";
+            if (path.Contains("."))
+            {
+                pattern = Path.GetFileName(path);
+            }
+            string root = Path.GetDirectoryName(path);
+            List<string> finalFiles = new List<string>();
+            if (!Directory.Exists(root)) return finalFiles.ToArray();
+            string[] files = Directory.GetFiles(root, pattern, SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].EndsWith(".meta")) continue;
+                finalFiles.Add(files[i]);
+            }
+            return finalFiles.ToArray();
+        }
+
         List<Parsed> ParseSingleRule(BuildRule rule)
         {
-            List<string> finalFiles = new List<string>();
-
-            string[] filterPathes = rule.filterPath.Split(';');
-            for (int i = 0; i < filterPathes.Length; i++)
-            {
-                if (string.IsNullOrEmpty(filterPathes[i])) continue;
-                string pattern = "*.*";
-                if (filterPathes[i].Contains("."))
-                {
-                    pattern = Path.GetFileName(filterPathes[i]);
-                }
-
-                string searchFolder = Path.GetDirectoryName(filterPathes[i]);
-
-                string[] files = Directory.GetFiles(searchFolder, pattern, SearchOption.AllDirectories);
-                finalFiles.AddRange(files);
-            }
-
-            // ignore pathes
-            string[] ignorePathes = rule.ignorePath.Split(';');
-            for (int i = 0; i < ignorePathes.Length; i++)
-            {
-                if (string.IsNullOrEmpty(ignorePathes[i])) continue;
-                string pattern = "*.*";
-                if (ignorePathes[i].Contains("."))
-                {
-                    pattern = Path.GetFileName(ignorePathes[i]);
-                }
-
-                string searchFolder = Path.GetDirectoryName(ignorePathes[i]);
-
-                string[] files = Directory.GetFiles(searchFolder, pattern, SearchOption.AllDirectories);
-                foreach (string ignored in files)
-                {
-                    finalFiles.Remove(ignored);
-                }
-            }
-
             List<Parsed> _plist = new List<Parsed>();
-            // note that one rule could create multiple parsed.
-            // now let's parse the assetBundleName carefully
-            string assetBundleName = rule.assetBundleName;
-            if (!assetBundleName.Contains("{"))
+            if (rule.filterPath.Contains("{fileName}"))
             {
-                Parsed parsed = new Parsed();
-                parsed.assetBundleName = rule.assetBundleName;
-                parsed.assetFiles = finalFiles.ToArray();
-                parsed.isBuiltIn = rule.isBuiltIn;
-                _plist.Add(parsed);
+                List<string> filteredFiles = new List<string>();
+                // grouped by fileName
+                Dictionary<string, List<string>> gf = new Dictionary<string, List<string>>();
+                string filterPath = rule.filterPath.Replace("{fileName}", "*");
+                filteredFiles.AddRange(GetFiles(filterPath));
+
+                string[] ignorePathes = rule.ignorePath.Split(';');
+                foreach (string ignorePath in ignorePathes)
+                {
+                    if (string.IsNullOrEmpty(ignorePath)) continue;
+                    string path = ignorePath.Replace("{fileName}", "*");
+                    string[] ignoreFiles = GetFiles(path);
+                    foreach (string ignored in ignoreFiles)
+                    {
+                        filteredFiles.Remove(ignored);
+                    }
+                }
+
+                for (int i = 0; i < filteredFiles.Count; i++)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(filteredFiles[i]);
+                    gf.Add(fileName, new List<string>());
+                    gf[fileName].Add(filteredFiles[i]);
+
+                    string[] incPathes = rule.includePath.Split(';');
+                    foreach (string incPath in incPathes)
+                    {
+                        if (string.IsNullOrEmpty(incPath) || !incPath.Contains("{fileName}")) continue; // gets ignored
+                        string[] incFiles = GetFiles(incPath.Replace("{fileName}", fileName));
+                        gf[fileName].AddRange(incFiles);
+                    }
+                }
+               
+                // fill the parsed
+                foreach (KeyValuePair<string, List<string>> pair in gf)
+                {
+                    Parsed p = new Parsed();
+                    p.assetBundleName = rule.assetBundleName.Replace("{fileName}", pair.Key);
+                    p.assetFiles = pair.Value.ToArray();
+                    p.isBuiltIn = rule.isBuiltIn;
+                    _plist.Add(p);
+                } 
+            }
+            else if (rule.filterPath.Contains("{folderName}"))
+            {
+                List<string> filteredFiles = new List<string>();
+                // grouped by folderName
+                Dictionary<string, List<string>> gf = new Dictionary<string, List<string>>();
+                int indexStart = rule.filterPath.IndexOf("{folderName}");
+                string filterPrePath = rule.filterPath.Substring(0, indexStart);
+                string[] folders = Directory.GetDirectories(filterPrePath);
+
+                for (int i = 0; i < folders.Length; i++)
+                {
+                    string[] folderNames = folders[i].Replace("\\", "/").Split('/');
+                    string folderName = folderNames[folderNames.Length - 1];
+
+                    string filterPath = rule.filterPath.Replace("{folderName}", folderName);
+                    filteredFiles.AddRange(GetFiles(filterPath));
+                    
+                    string[] ignorePathes = rule.ignorePath.Split(';');
+                    foreach (string ignorePath in ignorePathes)
+                    {
+                        string path = ignorePath.Replace("{folderName}", folderName);
+                        string[] ignoreFiles = GetFiles(path);
+                        foreach (string ignored in ignoreFiles)
+                        {
+                            filteredFiles.Remove(ignored);
+                        }
+                    }
+                    
+                    gf.Add(folderName, new List<string>());
+                    gf[folderName].AddRange(filteredFiles);
+
+                    string[] incPathes = rule.includePath.Split(';');
+                    foreach (string incPath in incPathes)
+                    {
+                        if (string.IsNullOrEmpty(incPath) || !incPath.Contains("{folderName}")) continue; // gets ignored
+                        string[] incFiles = GetFiles(incPath.Replace("{folderName}", folderName));
+                        gf[folderName].AddRange(incFiles);
+                    }
+                }
+
+                // fill the parsed
+                foreach (KeyValuePair<string, List<string>> pair in gf)
+                {
+                    Parsed p = new Parsed();
+                    p.assetBundleName = rule.assetBundleName.Replace("{folderName}", pair.Key);
+                    p.assetFiles = pair.Value.ToArray();
+                    p.isBuiltIn = rule.isBuiltIn;
+                    _plist.Add(p);
+                }
             }
             else
             {
-                if (assetBundleName.Contains("{rootFolder}"))
+                List<string> filteredFiles = new List<string>();
+                filteredFiles.AddRange(GetFiles(rule.filterPath));
+
+                string[] ignorePathes = rule.ignorePath.Split(';');
+                foreach (string ignorePath in ignorePathes)
                 {
-                    RootFolderFilter(rule, finalFiles, _plist);
+                    if (string.IsNullOrEmpty(ignorePath)) continue;
+                    string[] ignoreFiles = GetFiles(ignorePath);
+                    foreach (string ignored in ignoreFiles)
+                    {
+                        filteredFiles.Remove(ignored);
+                    }
                 }
-                else if (assetBundleName.Contains("{fileName}"))
+
+                string[] incPathes = rule.includePath.Split(';');
+                foreach (string incPath in incPathes)
                 {
-                    FileNameFilter(rule, finalFiles, _plist);
+                    if (string.IsNullOrEmpty(incPath)) continue; // gets ignored
+                    string[] incFiles = GetFiles(incPath);
+                    filteredFiles.AddRange(incFiles);
                 }
+
+                Parsed p = new Parsed();
+                p.assetBundleName = rule.assetBundleName;
+                p.assetFiles = filteredFiles.ToArray();
+                p.isBuiltIn = rule.isBuiltIn;
+                _plist.Add(p);
             }
 
             return _plist;
         }
 
-        // group allPathes by assetBundleName 
-        // e.g : root path = Assets/Res/UI/
-        //       file = Assets/Res/UI/main/a.png
-        //       rootPath[0] = ui
-        //       rootPath[1] = main
-        void RootFolderFilter(BuildRule rule, List<string> allPathes, List<Parsed> list)
+        // filterStr : "ui/icon/{rootFolder}[1].unity3d"
+        void ExtractRootFolderIndex(ref string filterStr, out int index)
         {
-            int indexFromRoot = 0;
-            if (rule.assetBundleName.Contains("["))
+            index = 0;
+            if (filterStr.Contains("["))
             {
                 {
-                    Regex index = new Regex(@"\[([0-9]+)\]");
-                    Match match = index.Match(rule.assetBundleName);
+                    Regex pattern = new Regex(@"\[([0-9]+)\]");
+                    Match match = pattern.Match(filterStr);
                     if (match.Success)
                     {
-                        indexFromRoot = int.Parse(match.Groups[1].Value);
+                        index = int.Parse(match.Groups[1].Value);
                     }
                 }
 
                 {
-                    Regex index = new Regex(@"\[[0-9]+\]");
-                    rule.assetBundleName = index.Replace(rule.assetBundleName, "");
+                    Regex pattern = new Regex(@"\[[0-9]+\]");
+                    filterStr = pattern.Replace(filterStr, "");
                 }
-            }
-
-            //Debug.Log("index from root : " + indexFromRoot);
-            //Debug.Log("post replaced : " + rule.assetBundleName);
-
-            string[] filterPathes = rule.filterPath.Split(';');
-            List<string> rootFolders = new List<string>(filterPathes.Length);
-            Dictionary<string, List<string>> groupByRootFolder = new Dictionary<string, List<string>>(filterPathes.Length);
-            for (int i = 0; i < filterPathes.Length; i++)
-            {
-                string rootFolderName = Path.GetDirectoryName(filterPathes[i]);
-                rootFolders.Add(rootFolderName.Replace("\\", "/"));
-                groupByRootFolder.Add(rootFolderName.Replace("\\", "/"), new List<string>());
-            }
-
-            for (int i = 0; i < allPathes.Count; i++)
-            {
-                for (int r = 0; r < rootFolders.Count; r++)
-                {
-                    if (allPathes[i].Contains(rootFolders[r]))
-                    {
-                        string[] rootSplited = rootFolders[r].Split('/');
-                        int rootIndex = rootSplited.Length - 1;
-                        string[] pathSplited = allPathes[i].Replace("\\", "/").Split('/');
-
-                        string abNameReplace = pathSplited[rootIndex + indexFromRoot];
-                        string abName = rule.assetBundleName.Replace("{rootFolder}", abNameReplace);
-                        if (!groupByRootFolder.ContainsKey(abName))
-                        {
-                            groupByRootFolder.Add(abName, new List<string>());
-                        }
-                        groupByRootFolder[abName].Add(allPathes[i]);
-                        break;
-                    }
-                }
-            }
-
-            foreach (KeyValuePair<string, List<string>> pair in groupByRootFolder)
-            {
-                Parsed parsed = new Parsed();
-                parsed.assetBundleName = pair.Key;
-                parsed.assetFiles = pair.Value.ToArray();
-                parsed.isBuiltIn = rule.isBuiltIn;
-                list.Add(parsed);
-            }
-        }
-
-        void FileNameFilter(BuildRule rule, List<string> allPathes, List<Parsed> list)
-        {
-            for (int i = 0; i < allPathes.Count; i++)
-            {
-                Parsed parsed = new Parsed();
-                parsed.assetBundleName = rule.assetBundleName.Replace("{fileName}", Path.GetFileNameWithoutExtension(allPathes[i]));
-                parsed.assetFiles = new string[] { allPathes[i] };
-                parsed.isBuiltIn = rule.isBuiltIn;
-                list.Add(parsed);
             }
         }
     }
