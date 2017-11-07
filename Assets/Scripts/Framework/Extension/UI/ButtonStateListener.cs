@@ -11,9 +11,9 @@ namespace FrameWork
     [RequireComponent(typeof(Button))]
     public class ButtonStateListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        public UnityAction onButtonPressed;
-        public UnityAction onButtonReleased;
-
+        public UnityEvent onButtonPressed;
+        public UnityEvent onButtonReleased;
+        
         private Button button;
 
         private void Awake()

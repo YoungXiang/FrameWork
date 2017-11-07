@@ -28,6 +28,8 @@ namespace FrameWork
         }
     }
 
+    // this behaves pretty much like the state machine
+    // only the scene object has different behaviours than a state.
     public class SceneManager : SingleBehaviour<SceneManager>
     {
         /// <summary>

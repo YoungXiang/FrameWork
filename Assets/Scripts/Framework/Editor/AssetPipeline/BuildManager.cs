@@ -138,7 +138,7 @@ namespace FrameWork
         /// </summary>
         void PostBuildAsset(AssetBundleManifestNew manifest, AssetBundleManifest unityManifest)
         {
-            Caching.CleanCache();
+            Caching.ClearCache();
             AssetDatabase.RemoveUnusedAssetBundleNames();
 
             /*

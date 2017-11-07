@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MessagePack;
 
 namespace FrameWork
 {
@@ -38,6 +39,7 @@ namespace FrameWork
     }
 
     [System.Serializable]
+    [MessagePackObject(keyAsPropertyName: true)]
     public sealed class AssetBundleConfig
     {
         // or bundle name
@@ -60,14 +62,17 @@ namespace FrameWork
 
         // should re-download or not
         [System.NonSerialized]
+        [IgnoreMember]
         public bool needUpdate;
 
         // is downloaded or not
         [System.NonSerialized]
+        [IgnoreMember]
         public bool downloaded;
     }
 
     [System.Serializable]
+    [MessagePackObject(keyAsPropertyName: true)]
     public sealed class AssetBundleManifestNew
     {
         public Dictionary<int, AssetBundleConfig> assetBundleConfig;

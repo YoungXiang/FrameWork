@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using FrameWork;
+using System.Linq;
 
 public class UILayer
 {
@@ -19,6 +20,7 @@ public class UIManager : SingleBehaviour<UIManager>
     #region Engine Callbacks
     void Awake()
     {
+        gameObject.layer = LayerMask.NameToLayer("UI");
         GameObject eventSystemGo = GameObject.Find("EventSystem");
         if (eventSystemGo != null)
         {
@@ -33,18 +35,21 @@ public class UIManager : SingleBehaviour<UIManager>
         eventSystemGo.transform.SetParent(transform);
 
         SetupBuiltingLayers();
-    }
 
-    void OnEnable()
-    {
+        // NOTE: [Bug], when UnityEditor.MaterialEditor:OnDisable(), the sceneUnloaded delegate was triggered.
+#if !UNITY_EDITOR
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
         UnityEngine.SceneManagement.SceneManager.sceneUnloaded += OnSceneUnloaded;
+#endif
     }
 
-    void OnDisable()
+    public override void OnDestroy()
     {
+#if !UNITY_EDITOR
         UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
         UnityEngine.SceneManagement.SceneManager.sceneUnloaded -= OnSceneUnloaded;
+#endif
+        base.OnDestroy();
     }
 
     void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
@@ -82,23 +87,22 @@ public class UIManager : SingleBehaviour<UIManager>
         }
     }
 #endif
-    #endregion
+#endregion
 
     void SetupBuiltingLayers()
     {
     }
     
-    // TODO: Layer Auto Unload
     public void NewLayer(int layerLevel, string layerName)
     {
         GameObject layer = new GameObject(layerName);
-        layer.transform.SetParent(transform);
+        layer.transform.SetParent(transform, false);
+        layer.layer = LayerMask.NameToLayer("UI");
 
         Canvas canvas = layer.AddComponent<Canvas>();
-        canvas.sortingOrder = layerLevel;
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.pixelPerfect = true;
-
+        
         CanvasScaler scaler = layer.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(ResolutionWidth, ResolutionHeight);
@@ -107,6 +111,10 @@ public class UIManager : SingleBehaviour<UIManager>
 
         GraphicRaycaster ray = layer.AddComponent<GraphicRaycaster>();
         ray.ignoreReversedGraphics = true;
+
+        // this part is tricky... must activate first and then set the sortingOrder.
+        layer.SetActive(true);
+        canvas.sortingOrder = layerLevel;
 
         uiLayers.Add(layerLevel, layer);
     }
@@ -153,18 +161,18 @@ public class UIManager : SingleBehaviour<UIManager>
 
         uiStates[uiStateName].transform.SetParent(uiLayers[layer].transform, false);
         if (uiStates[uiStateName].bringToFirst)
-            uiStates[uiStateName].transform.SetAsFirstSibling();
+            uiStates[uiStateName].transform.SetAsLastSibling();
         else
         {
             uiStates[uiStateName].transform.SetSiblingIndex(uiStates[uiStateName].sortingOrder);
-            if (uiLayers[layer].transform.childCount > 1) SortSibling(layer);
+            if (uiLayers[layer].transform.childCount > 1) SortSiblingUnderLayer(layer);
         }
 
         if (!string.IsNullOrEmpty(showState))
             uiStates[uiStateName].ChangeState(showState);
     }
 
-    void SortSibling(int layer)
+    void SortSiblingUnderLayer(int layer)
     {
         int childCount = uiLayers[layer].transform.childCount;
         List<string> uiStateNames = new List<string>(childCount);

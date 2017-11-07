@@ -1,10 +1,15 @@
-﻿using System;
+﻿#define USE_MESSAGEPACK
+
+using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using UnityEngine;
+#if USE_MESSAGEPACK
+using MessagePack;
+#endif
 
 namespace FrameWork
 {
@@ -46,7 +51,7 @@ namespace FrameWork
             return ComputeMD5(File.ReadAllBytes(path));
         }
 
-        #region Encrypt bytes & Decrypt bytes
+#region Encrypt bytes & Decrypt bytes
         private const string abFuzzyKey = "TKABFASHIONSHOWXYYX";
         private const string abFuzzyIV = "AXIAKNDLAENVMDAKEQCMIOENC";
         public static byte[] EncryptBytes(byte[] bytes, string fuzzyKey = abFuzzyKey, string fuzzyIV = abFuzzyIV)
@@ -86,7 +91,7 @@ namespace FrameWork
                 return mstream.ToArray();
             }
         }
-        #endregion
+#endregion
 
         public static byte[] LoadBytesFromFile(string path)
         {
@@ -143,6 +148,10 @@ namespace FrameWork
             if (bytes == null) return null;
 
             T ret = default(T);
+
+#if USE_MESSAGEPACK
+            ret = MessagePackSerializer.Deserialize<T>(bytes);
+#else
             var memStream = new MemoryStream();
             var binFormatter = new BinaryFormatter();
 
@@ -152,11 +161,15 @@ namespace FrameWork
 
             binFormatter.Binder = AssemblyBinder.binder;
             ret = binFormatter.Deserialize(memStream) as T;
+#endif
             return ret;
         }
 
         public static byte[] SerializeObjectToBytes<T>(T obj)
         {
+#if USE_MESSAGEPACK
+            return MessagePackSerializer.Serialize<T>(obj);
+#else
             var binFormatter = new BinaryFormatter();
             var memStream = new MemoryStream();
             //binFormatter.Binder = AssemblyBinder.binder;
@@ -164,6 +177,7 @@ namespace FrameWork
 
             //This gives you the byte array.
             return memStream.ToArray();
+#endif
         }
 
         public static void SerializeObjectToFile<T>(string path, T obj)
@@ -180,7 +194,8 @@ namespace FrameWork
             File.WriteAllBytes(path, bytes);
         }
     }
-
+    
+#if !USE_MESSAGEPACK
     public sealed class AssemblyBinder : SerializationBinder
     {
         public static AssemblyBinder binder = new AssemblyBinder();
@@ -191,4 +206,5 @@ namespace FrameWork
             return Type.GetType(string.Format("{0}, {1}", typeName, assembleFullName));
         }
     }
+#endif
 }

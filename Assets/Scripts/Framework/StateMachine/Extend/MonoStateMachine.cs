@@ -61,7 +61,7 @@ namespace FrameWork
             if (!m_states.ContainsKey(state.name)) m_states.Add(state.name, state);
 
             state.OnRegistered(this);
-            EventListener.Do(()=> { ChangeState(state.name); }).When(string.Format("ChangeState_{0}_{1}", name, state.name));
+            EventListener.Do(()=> { ChangeState(state.name); }).When(string.Format("ChangeState_{0}_{1}", name.Replace("(Clone)", ""), state.name));
         }
 
         public void ChangeState(string newStateName)

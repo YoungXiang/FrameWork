@@ -1,6 +1,22 @@
 {
   "rules":[
     {
+      "ruleName": "UI-Prefabs",
+      "filterPath": "Assets/Res/UI/Prefabs/{fileName}.*",
+      "includePath": "Assets/Res/UI/Textures/{fileName}/*.*",
+      "ignorePath": "",
+      "assetBundleName": "ui/icon/{fileName}.unity3d",
+      "isBuiltIn": true
+    },
+    {
+      "ruleName": "Cloth",
+      "filterPath": "Assets/Res/Models/Wearables/Cloth/{folderName}/*.*",
+      "includePath": "",
+      "ignorePath": "",
+      "assetBundleName": "models/wearables/cloth/{folderName}.unity3d",
+      "isBuiltIn": true
+    },
+    {
       "ruleName": "MainScene",
       "filterPath": "Assets/Res/_Scenes/MainScene.unity",
       "includePath": "",
@@ -9,11 +25,11 @@
       "isBuiltIn": true
     },
     {
-      "ruleName": "UI-Prefabs",
-      "filterPath": "Assets/Res/UI/Prefabs/{fileName}.*",
-      "includePath": "Assets/Res/UI/Textures/{fileName}/*.*",
+      "ruleName": "SingleAssets",
+      "filterPath": "Assets/Res/SingleAssets/{fileName}.*",
+      "includePath": "",
       "ignorePath": "",
-      "assetBundleName": "ui/icon/{fileName}.unity3d",
+      "assetBundleName": "singleassets/{fileName}_{id}.unity3d",
       "isBuiltIn": true
     }
   ]

@@ -72,14 +72,21 @@ namespace FrameWork
             {
                 pattern = Path.GetFileName(path);
             }
-            string root = Path.GetDirectoryName(path);
             List<string> finalFiles = new List<string>();
-            if (!Directory.Exists(root)) return finalFiles.ToArray();
-            string[] files = Directory.GetFiles(root, pattern, SearchOption.AllDirectories);
-            for (int i = 0; i < files.Length; i++)
+            try
             {
-                if (files[i].EndsWith(".meta")) continue;
-                finalFiles.Add(files[i]);
+                string root = Path.GetDirectoryName(path);
+                if (!Directory.Exists(root)) return finalFiles.ToArray();
+                string[] files = Directory.GetFiles(root, pattern, SearchOption.AllDirectories);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    if (files[i].EndsWith(".meta")) continue;
+                    finalFiles.Add(files[i]);
+                }
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogErrorFormat("[Error]: {0}\n{1}", path, e.Message);
             }
             return finalFiles.ToArray();
         }
@@ -127,6 +134,10 @@ namespace FrameWork
                 {
                     Parsed p = new Parsed();
                     p.assetBundleName = rule.assetBundleName.Replace("{fileName}", pair.Key);
+                    if (p.assetBundleName.Contains("{id}"))
+                    {
+                        p.assetBundleName = p.assetBundleName.Replace("{id}", IDFromFiles(pair.Value).ToString());
+                    }
                     p.assetFiles = pair.Value.ToArray();
                     p.isBuiltIn = rule.isBuiltIn;
                     _plist.Add(p);
@@ -152,6 +163,7 @@ namespace FrameWork
                     string[] ignorePathes = rule.ignorePath.Split(';');
                     foreach (string ignorePath in ignorePathes)
                     {
+                        if (string.IsNullOrEmpty(ignorePath)) continue;
                         string path = ignorePath.Replace("{folderName}", folderName);
                         string[] ignoreFiles = GetFiles(path);
                         foreach (string ignored in ignoreFiles)
@@ -177,6 +189,10 @@ namespace FrameWork
                 {
                     Parsed p = new Parsed();
                     p.assetBundleName = rule.assetBundleName.Replace("{folderName}", pair.Key);
+                    if (p.assetBundleName.Contains("{id}"))
+                    {
+                        p.assetBundleName = p.assetBundleName.Replace("{id}", IDFromFiles(pair.Value).ToString());
+                    }
                     p.assetFiles = pair.Value.ToArray();
                     p.isBuiltIn = rule.isBuiltIn;
                     _plist.Add(p);
@@ -208,12 +224,27 @@ namespace FrameWork
 
                 Parsed p = new Parsed();
                 p.assetBundleName = rule.assetBundleName;
+                if (p.assetBundleName.Contains("{id}"))
+                {
+                    p.assetBundleName = p.assetBundleName.Replace("{id}", IDFromFiles(filteredFiles).ToString());
+                }
                 p.assetFiles = filteredFiles.ToArray();
                 p.isBuiltIn = rule.isBuiltIn;
                 _plist.Add(p);
             }
 
             return _plist;
+        }
+
+        int IDFromFiles(List<string> filePathes)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            for (int i = 0; i < filePathes.Count; i++)
+            {
+                sb.Append(filePathes[i].GetHashCode());
+            }
+
+            return sb.GetHashCode();
         }
 
         // filterStr : "ui/icon/{rootFolder}[1].unity3d"
