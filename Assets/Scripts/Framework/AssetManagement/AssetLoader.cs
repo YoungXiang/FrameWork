@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FrameWork
 {
-    public partial class AssetLoader
+    internal class AssetLoader
     {
         #region AssetBundle reference Management
         // All loaded asset bundles
@@ -114,6 +114,12 @@ namespace FrameWork
         {
             if (assetBundles.ContainsKey(bundleHash))
             {
+#if SIMULATION
+                if (assetBundles[bundleHash].bundle == null)
+                {
+                    assetBundles[bundleHash].bundle = LowLevelLoader_Editor.fakeBundle;
+                }
+#endif
                 // bundle is Loaded
                 return;
             }
@@ -207,9 +213,10 @@ namespace FrameWork
             AssetBundleReference abRef = assetBundles[bundleHash];
             if (abRef.bundle == null)
             {
-                Debug.LogErrorFormat("Trying to load a none built-in asset sync. Please use LoadFromWWWOrCache instead.");
+                Debug.LogErrorFormat("Trying to load a none built-in asset sync. Please use LoadFromWWWOrCache instead. [{0}]", assetPath);
                 return null;
             }
+
 #if SIMULATION
             T asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(assetPath);
 #else
@@ -338,6 +345,8 @@ namespace FrameWork
 
             // add dependencies references
             AssetBundleConfig bConf = manifest.GetBundleConfig(bundleHash);
+            //Debug.LogFormat("++ Ref : {0}, {1}", bConf.bundlePath, abRef.refCount);
+
             if (bConf != null && bConf.dependencies != null && bConf.dependencies.Length > 0)
             {
                 for (int i = 0; i < bConf.dependencies.Length; i++)
@@ -355,6 +364,7 @@ namespace FrameWork
                 abRef.RemoveRef();
 
                 AssetBundleConfig bConf = manifest.GetBundleConfig(bundleHash);
+                //Debug.LogFormat("-- Ref : {0}, {1}", bConf.bundlePath, abRef.refCount);
 
                 if (abRef.refCount <= 0)
                 {

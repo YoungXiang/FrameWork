@@ -9,6 +9,18 @@ namespace JsonSharp
 {
     internal class CSharpSourceCompiler
     {
+        public static readonly string baseClass = @"
+using MessagePack;
+
+namespace FrameWork
+{
+    [MessagePackObject(keyAsPropertyName: true)]
+    public class TData<T> where T : class
+    {
+        public T[] datas;
+    }
+}";
+
         public static string FullReference(string relativeReference)
         {
             // First, get the path for this executing assembly.
@@ -54,6 +66,36 @@ namespace JsonSharp
             }
         }
 
+        public static Assembly CompileAndReturnAssembly(string source)
+        {
+            CodeDomProvider provider =
+                CodeDomProvider.CreateProvider("CSharp", new Dictionary<string, string>() { { "CompilerVersion", "v4.0" } });
+
+            CompilerParameters cp = new CompilerParameters();
+            cp.GenerateExecutable = false;
+            cp.GenerateInMemory = false;
+            cp.OutputAssembly = Path.Combine(Directory.GetCurrentDirectory(), "FrameWork.dll");
+            cp.TreatWarningsAsErrors = false;
+            cp.ReferencedAssemblies.Add(FullReference("MessagePack.dll"));
+
+            CompilerResults cr = provider.CompileAssemblyFromSource(cp, source);
+
+            Console.WriteLine(source);
+
+            foreach (CompilerError ce in cr.Errors)
+            {
+                if (ce.IsWarning) continue;
+                Console.WriteLine("{0}({1},{2}: error {3}: {4}", ce.FileName, ce.Line, ce.Column, ce.ErrorNumber, ce.ErrorText);
+            }
+            
+            if (cr.CompiledAssembly != null)
+            {
+                Console.WriteLine("Compile Success! {0}.", cr.CompiledAssembly.Location);
+            }
+
+            return cr.CompiledAssembly;
+        }
+
         public static Type[] CompileAndReturnInstance(string source)
         {
             CodeDomProvider provider = 
@@ -64,11 +106,14 @@ namespace JsonSharp
             cp.GenerateInMemory = true;
             cp.TreatWarningsAsErrors = false;
             cp.ReferencedAssemblies.Add(FullReference("MessagePack.dll"));
+            //cp.ReferencedAssemblies.Add(CompileAndReturnAssembly(baseClass).Location);
 
             //string libDir = AppDomain.CurrentDomain.BaseDirectory;
             //libDir.TrimEnd('\\');
             //cp.CompilerOptions = string.Format("/lib:\"{0}\"", libDir);
             CompilerResults cr = provider.CompileAssemblyFromSource(cp, source);
+
+            Console.WriteLine(source);
 
             foreach (CompilerError ce in cr.Errors)
             {

@@ -15,6 +15,8 @@ namespace FrameWork
 
         public IState currentState = null;
 
+        public SharedData sharedData = SharedData.Instance;
+
         public virtual string initialStateName { get; protected set; }
         public string currentStateName
         {
@@ -76,15 +78,20 @@ namespace FrameWork
             }
 
             IState newState = GetState(newStateName);
-
-            // Debug
-            //LogUtil.LogColor(LogUtil.Color.green, "[StateMachine] - [{0}] state changed : FROM [{1}] TO [{2}].", name, currentState == null ? "NULL" : currentState.name, newStateName);
-
+      
             if (newState != null)
             {
+                // Debug
+                //LogUtil.LogColor(LogUtil.Color.green, "[StateMachine] - [{0}] state changed : FROM [{1}] TO [{2}].", name, currentState == null ? "NULL" : currentState.name, newStateName);
                 currentState = newState;
                 currentState.OnEnter();
             }
+#if UNITY_EDITOR
+            else
+            {
+                LogUtil.LogColor(LogUtil.Color.red, "[StateMachine] - State NOT exist : [{0}].", newStateName);
+            }
+#endif
         }
 
         public void PushState(string newStateName)

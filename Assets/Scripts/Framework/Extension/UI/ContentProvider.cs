@@ -24,6 +24,12 @@ namespace FrameWork
         {
 
         }
+
+        // clean for recycle.
+        public virtual void Clean()
+        {
+
+        }
     }
     #endregion
 
@@ -83,10 +89,21 @@ namespace FrameWork
             datas = datas_;
             if (items == null || items.Length != datas.Length)
             {
+                if (items != null)
+                {
+                    // recycle old
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        items[i].Clean();
+                        PrefabPool.Instance.Recycle(template, items[i].gameObject);
+                    }
+                }
+
                 items = new ItemType[datas.Length];
                 for (int i = 0; i < datas.Length; i++)
                 {
                     items[i] = NewItem();
+                    items[i].name = string.Format("Item{0}", i);
                 }
             }
 
@@ -124,9 +141,9 @@ namespace FrameWork
 
         protected virtual ItemType NewItem()
         {
-            GameObject instanced = Object.Instantiate(template);
+            // Using prefab pool
+            GameObject instanced = PrefabPool.Instance.Instantiate(template);
             instanced.transform.SetParent(transform, false);
-            instanced.SetActive(true);
             return instanced.GetComponent<ItemType>();
         }
     }

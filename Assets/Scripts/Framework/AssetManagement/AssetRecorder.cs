@@ -31,6 +31,7 @@ namespace FrameWork
                 // do the unbind operation
                 AssetManager.UnbindAsset(assetBundleRefs[i]);
             }
+            assetBundleRefs.Clear();
         }
     }
 }

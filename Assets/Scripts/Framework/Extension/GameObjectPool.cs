@@ -32,7 +32,7 @@ namespace FrameWork
         {
             _pool = new _GameObjectPool();
             _pool.parent = transform;
-            _pool.Init(100);
+            _pool.Init(100, true);
         }
 
         public override void OnDestroy()

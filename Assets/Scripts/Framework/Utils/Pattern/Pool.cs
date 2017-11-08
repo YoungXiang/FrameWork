@@ -8,7 +8,7 @@ namespace FrameWork
     {
         Dictionary<T, bool> used;
         Dictionary<T, bool> unused;
-
+        
         public int capacity
         {
             get { return used.Count + unused.Count; }
@@ -16,6 +16,8 @@ namespace FrameWork
 
         public Pool()
         {
+            unused = new Dictionary<T, bool>();
+            used = new Dictionary<T, bool>();
         }
 
         public Pool(int poolSize)
@@ -23,14 +25,16 @@ namespace FrameWork
             Init(poolSize);
         }
         
-        public void Init(int poolSize)
+        public void Init(int poolSize, bool aggressive = false)
         {
             unused = new Dictionary<T, bool>(poolSize);
             used = new Dictionary<T, bool>(poolSize);
-            for (int i = 0; i < poolSize; i++)
-            {
-                unused.Add(NewInstance(), true);
-            }
+
+            if (aggressive)
+                for (int i = 0; i < poolSize; i++)
+                {
+                    unused.Add(NewInstance(), true);
+                }
         }
 
         public virtual T NewInstance()
@@ -73,15 +77,7 @@ namespace FrameWork
             {
                 unused.Add(NewInstance(), true);
             }
-
-            /*
-            T obj = default(T);
-            foreach(KeyValuePair<T, bool> pair in unused)
-            {
-                obj = pair.Key; break;
-            }
-            */
-
+            
             T obj = unused.First().Key;
             used.Add(obj, true);
             // mark as used

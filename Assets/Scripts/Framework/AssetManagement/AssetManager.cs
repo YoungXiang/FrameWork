@@ -6,7 +6,7 @@ namespace FrameWork
 {
     public static class AssetManager
     {
-        public static AssetLoader s_loader;
+        internal static AssetLoader s_loader;
         static AssetManager()
         {
             IOUtils.CreateDirectoryIfNotExist(AssetUtils.localConfigSavePath);

@@ -9,7 +9,7 @@ namespace FrameWork
     internal class LowLevelLoader_Editor : ILowLevelLoader
     {
         readonly string fakeBundlePath = "Assets/Scripts/Framework/AssetManagement/LowLevelLoader/fake.unity3d";
-        AssetBundle fakeBundle;
+        public static AssetBundle fakeBundle;
         void TryUnloadFakeBundle()
         {
             if (fakeBundle != null)

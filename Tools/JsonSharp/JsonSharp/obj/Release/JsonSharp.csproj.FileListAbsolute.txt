@@ -20,3 +20,17 @@ D:\Project_Cloth\trunk\JsonSharp\JsonSharp\obj\Release\JsonSharp.exe
 D:\Project_Cloth\trunk\JsonSharp\JsonSharp\obj\Release\JsonSharp.pdb
 D:\Project_Cloth\trunk\JsonSharp\JsonSharp\bin\Release\MessagePack.dll
 D:\Project_Cloth\trunk\JsonSharp\JsonSharp\bin\Release\MessagePack.xml
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\JsonSharp.exe.config
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Release\JsonSharp.exe
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Release\JsonSharp.pdb
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\JsonSharp.exe
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\JsonSharp.pdb
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\Excel.dll
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\ICSharpCode.SharpZipLib.dll
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\MessagePack.dll
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\System.Threading.Tasks.Extensions.dll
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\System.ValueTuple.dll
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\Excel.pdb
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\MessagePack.xml
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\System.Threading.Tasks.Extensions.xml
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Release\JsonSharp.csprojResolveAssemblyReference.cache

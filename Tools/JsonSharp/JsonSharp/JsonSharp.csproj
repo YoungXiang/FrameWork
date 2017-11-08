@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BridgeClass.cs" />
     <Compile Include="ClassGenerator\ClassDefine.cs" />
     <Compile Include="ClassGenerator\ClassGenerator.cs" />
     <Compile Include="ClassGenerator\ClassParser.cs" />

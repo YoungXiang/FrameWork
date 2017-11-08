@@ -6,6 +6,7 @@ using System.Data;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using MessagePack;
+using FrameWork;
 
 using Excel;
 
@@ -109,10 +110,10 @@ namespace JsonSharp.Test
                     var binFormatter = new BinaryFormatter();
                     var memStream = new MemoryStream();
                     binFormatter.Serialize(memStream, container);
+                    //This gives you the byte array.
                     data = memStream.ToArray();
 #endif
 
-                    //This gives you the byte array.
                     string dataPath = Path.Combine(dataOutputDir, cd.className + "Data.data");
                     if (File.Exists(dataPath)) File.Delete(dataPath);
                     if (!Directory.Exists(Path.GetDirectoryName(dataPath))) Directory.CreateDirectory(Path.GetDirectoryName(dataPath));
