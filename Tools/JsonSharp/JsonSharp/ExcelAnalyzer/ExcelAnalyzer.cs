@@ -13,8 +13,13 @@ namespace JsonSharp
         public string[] sDesc;  // row[3]
         public string[,] datas; // row i, colume j
 
+        public bool isValidSheet = true;
+
         public void Analyze(DataTable sheet)
         {
+            isValidSheet = IsValidSheet(sheet);
+            if (!isValidSheet) return;
+
             sheetName = sheet.TableName;
             rowCount = sheet.Rows.Count;
             columnCount = sheet.Columns.Count;
@@ -51,6 +56,20 @@ namespace JsonSharp
                     datas[i - 3, j] = sheet.Rows[i][j].ToString();
                 }
             }
+        }
+
+        bool IsValidSheet(DataTable sheet)
+        {
+            for (int i = 0; i < sheet.Columns.Count; i++)
+            {
+                DataMemberType dm = DataMemberType.ParseDataMemberType(sheet.Rows[1][i].ToString());
+                if (dm.eType == EDataMemberType.None)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 

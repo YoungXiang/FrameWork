@@ -35,6 +35,7 @@ namespace JsonSharp.Test
                 for (int i = 0; i < analyzer.sheetCount; i++)
                 {
                     SheetProperty sp = analyzer.sheets[i];
+                    if (!sp.isValidSheet) continue;
 
                     ClassDefine cd = new ClassDefine();
                     cd.className = useFileName ? fileName : sp.sheetName;
@@ -75,23 +76,13 @@ namespace JsonSharp.Test
                             Console.WriteLine("Instance Create Failed : No classType found = " + dataClassType.ToString());
                             return;
                         }
+
                         // each row
                         for (int c = 0; c < sp.datas.GetLength(1); c++)
                         {
                             string dataName = sp.sNames[c];
                             string dataValue = sp.datas[r, c];
-                            try
-                            {
-                                Console.WriteLine("Try Set [{0}] to Value {1}", dataName, dataValue);
-                                FieldInfo fieldInfo = element.GetType().GetField(dataName);
-                                if (fieldInfo == null) Console.WriteLine("FieldInfo {0} is null.", dataName);
-                                fieldInfo.SetValue(element, Convert.ChangeType(dataValue, fieldInfo.FieldType));
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("Convert Failed.");
-                                Console.WriteLine(e.Message);
-                            }
+                            ObjectFill.TryFill(ref element, dataName, dataValue, cd.members[c].mType);
                         }
 
                         dataArray.SetValue(element, r);

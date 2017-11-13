@@ -14,7 +14,7 @@ namespace JsonSharp
         List,
         Map,
         None
-    }
+    }   
 
     public class DataMemberType
     {
@@ -49,6 +49,7 @@ namespace JsonSharp
                 {
                     tt.eType = EDataMemberType.Array;
                     tt.referenceString = dataValue;
+                    tt.childType = ParseDataMemberType(dataValue.Replace("[]", ""));
                 }
                 else if (dataValue.StartsWith("list"))  // list<int>
                 {
@@ -84,6 +85,24 @@ namespace JsonSharp
             }
 
             return input.Substring(istart + 1, ilast - istart - 1);
+        }
+
+        private static Dictionary<EDataMemberType, Type> typeMap = new Dictionary<EDataMemberType, Type>()
+        {
+            { EDataMemberType.Int, typeof(int) },
+            { EDataMemberType.Float, typeof(float) },
+            { EDataMemberType.String, typeof(string) },
+            { EDataMemberType.Bool, typeof(bool) }
+        };
+
+        public static Type ETypeToSystemType(EDataMemberType etype)
+        {
+            if (etype < EDataMemberType.Array)
+            {
+                return typeMap[etype];
+            }
+
+            return null;
         }
     }
 }
