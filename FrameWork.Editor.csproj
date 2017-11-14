@@ -132,16 +132,39 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Editor\TBS_EditorInitializer.cs" />
+    <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Editor\TBS_PresentationWindow.cs" />
+    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\ComponentWrapperEditor.cs" />
+    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\ECSMenus.cs" />
+    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\Editor\CustomEditorLayout.cs" />
+    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\Editor\DebugSystemInspector.cs" />
+    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\Editor\SystemMonitor.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\BuildEditor.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\BuildManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\BuildRule.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\IfAnyAssetImported.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\HierarchyDrawer.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\NameDrawer.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\ReadonlyDrawer.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\StateMachineEditor\MonoStateMachineInspector.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineWizard.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\UI\DefaultControls.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\UI\SceneDefaultUIEditor.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\UI\StringTableTextEditor.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\UI\UIExtendControls.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\UI\UIExtendMenuOptions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\ExampleProject01\Downloaded\BrokenVector\FreeLowPolyPack\readme.txt" />
+    <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyPBRShader.shader" />
+    <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyUnlitShader.shader" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\LICENSE.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Component Class-NewComponent.cs.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Component Struct-NewComponent.cs.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__System-NewSystem.cs.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__SystemController-NewSystemController.cs.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Class-NewComponent.cs.txt" />
+    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Struct-NewComponent.cs.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
   </ItemGroup>
