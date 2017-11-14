@@ -20,7 +20,7 @@ namespace FrameWork
 
     public class ContentItem<DataType> : ContentItemBase where DataType : ContentItemData
     {
-        public virtual void Setup(DataType data)
+        public virtual void Setup(DataType data, int index)
         {
 
         }
@@ -65,6 +65,8 @@ namespace FrameWork
             RectTransform templateRect = template.GetComponent<RectTransform>();
             m_ItemSize = new Vector2(templateRect.rect.width, templateRect.rect.height);
             template.SetActive(false);
+            // make template as my child, so that template is accessable in OnDestroy;
+            template.transform.SetParent(transform, false);
         }
     }
 
@@ -77,6 +79,8 @@ namespace FrameWork
         [HideInInspector]
         [Tooltip("Items")]
         public ItemType[] items;
+
+        public bool usePool = false;
         
         public virtual void SetupDatas(DataType[] datas_)
         {
@@ -91,11 +95,18 @@ namespace FrameWork
             {
                 if (items != null)
                 {
-                    // recycle old
                     for (int i = 0; i < items.Length; i++)
                     {
                         items[i].Clean();
-                        PrefabPool.Instance.Recycle(template, items[i].gameObject);
+                        if (usePool)
+                        {
+                            // recycle old
+                            PrefabPool.Instance.Recycle(template, items[i].gameObject);
+                        }
+                        else
+                        {
+                            Destroy(items[i].gameObject);
+                        }
                     }
                 }
 
@@ -128,23 +139,34 @@ namespace FrameWork
         public virtual void UpdateData(DataType data, int i)
         {
             datas[i] = data;
-            items[i].Setup(data);
+            items[i].Setup(data, i);
         }
 
         protected virtual void UpdateItems()
         {
             for (int i = 0; i < datas.Length; i++)
             {
-                items[i].Setup(datas[i]);
+                items[i].Setup(datas[i], i);
             }
         }
 
         protected virtual ItemType NewItem()
         {
             // Using prefab pool
-            GameObject instanced = PrefabPool.Instance.Instantiate(template);
+            GameObject instanced = usePool ? PrefabPool.Instance.Instantiate(template) : Instantiate(template);
             instanced.transform.SetParent(transform, false);
             return instanced.GetComponent<ItemType>();
+        }
+        
+        protected override void OnDestroy()
+        {
+            if (usePool)
+            {
+                if (PrefabPool.Instance != null)
+                {
+                    PrefabPool.Instance.Destroy(template);
+                }
+            }
         }
     }
     #endregion

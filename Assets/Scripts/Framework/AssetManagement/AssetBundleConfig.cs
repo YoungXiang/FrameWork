@@ -85,7 +85,7 @@ namespace FrameWork
             assetBundleConfig = new Dictionary<int, AssetBundleConfig>();
             assetsInBundle = new Dictionary<string, int>();
         }
-
+        
         public int GetBundleHashByAssetPath(string assetPath)
         {
             string lower = assetPath.ToLower();

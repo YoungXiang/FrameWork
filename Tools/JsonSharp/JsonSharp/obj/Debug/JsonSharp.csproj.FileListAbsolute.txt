@@ -36,3 +36,4 @@ D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Debug\MessagePack
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Debug\JsonSharp.exe
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Debug\JsonSharp.pdb
+D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Debug\JsonSharp.csprojResolveAssemblyReference.cache

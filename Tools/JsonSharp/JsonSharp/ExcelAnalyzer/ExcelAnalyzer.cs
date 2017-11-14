@@ -13,12 +13,13 @@ namespace JsonSharp
         public string[] sDesc;  // row[3]
         public string[,] datas; // row i, colume j
 
-        public bool isValidSheet = true;
+        public int validColumnCount = 0;
+        public int validDataRowCount = 0;
 
         public void Analyze(DataTable sheet)
         {
-            isValidSheet = IsValidSheet(sheet);
-            if (!isValidSheet) return;
+            validColumnCount = IsValidSheet(sheet);
+            if (validColumnCount <= 0) return;
 
             sheetName = sheet.TableName;
             rowCount = sheet.Rows.Count;
@@ -35,41 +36,65 @@ namespace JsonSharp
                     if (i == 0)
                     {
                         // names;
-                        sNames[j] = sheet.Rows[i][j].ToString();
+                        sNames[j] = sheet.Rows[i][j].ToString().Trim();
                     }
                     else if (i == 1)
                     {
-                        sTypes[j] = sheet.Rows[i][j].ToString();
+                        sTypes[j] = sheet.Rows[i][j].ToString().Trim();
                     }
                     else
                     {
-                        sDesc[j] = sheet.Rows[i][j].ToString();
+                        sDesc[j] = sheet.Rows[i][j].ToString().Trim();
                     }
                 }
             }
             // now parse data
-            datas = new string[rowCount - 3, columnCount];
+            validDataRowCount = 0;
             for (int i = 3; i < rowCount; i++)
+            {
+                bool shouldBreak = false;
+                for (int j = 0; j < columnCount; j++)
+                {
+                    string data = sheet.Rows[i][j].ToString().Trim();
+                    if (string.IsNullOrEmpty(data))
+                    {
+                        shouldBreak = true;
+                        break;
+                    }
+                }
+
+                if (shouldBreak) break;
+                else validDataRowCount++;
+            }
+
+            datas = new string[validDataRowCount, columnCount];
+            for (int i = 0; i < validDataRowCount; i++)
             {
                 for (int j = 0; j < columnCount; j++)
                 {
-                    datas[i - 3, j] = sheet.Rows[i][j].ToString();
+                    string data = sheet.Rows[i + 3][j].ToString().Trim();
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        datas[i, j] = data;
+                    }
                 }
             }
         }
 
-        bool IsValidSheet(DataTable sheet)
+        int IsValidSheet(DataTable sheet)
         {
-            for (int i = 0; i < sheet.Columns.Count; i++)
+            int valid = 0;
+            for (int i = 0; i < sheet.Columns.Count; i++, valid++)
             {
-                DataMemberType dm = DataMemberType.ParseDataMemberType(sheet.Rows[1][i].ToString());
+                DataMemberType dm = DataMemberType.ParseDataMemberType(sheet.Rows[1][i].ToString().Trim());
                 if (dm.eType == EDataMemberType.None)
                 {
-                    return false;
+                    Console.WriteLine("[Error]InValid Type {0}: This Sheet is going to be ignored.[{1}]", sheet.Rows[1][i], sheet.TableName);
+                    break;
                 }
             }
 
-            return true;
+            return valid;
         }
     }
 

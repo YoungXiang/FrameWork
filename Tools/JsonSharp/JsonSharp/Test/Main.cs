@@ -35,7 +35,10 @@ namespace JsonSharp.Test
                 for (int i = 0; i < analyzer.sheetCount; i++)
                 {
                     SheetProperty sp = analyzer.sheets[i];
-                    if (!sp.isValidSheet) continue;
+                    if (sp.validColumnCount <= 0)
+                    {
+                        continue;
+                    }
 
                     ClassDefine cd = new ClassDefine();
                     cd.className = useFileName ? fileName : sp.sheetName;
@@ -78,7 +81,8 @@ namespace JsonSharp.Test
                         }
 
                         // each row
-                        for (int c = 0; c < sp.datas.GetLength(1); c++)
+                        //for (int c = 0; c < sp.datas.GetLength(1); c++)
+                        for (int c = 0; c < sp.validColumnCount; c++)
                         {
                             string dataName = sp.sNames[c];
                             string dataValue = sp.datas[r, c];

@@ -42,32 +42,37 @@ namespace FrameWork
         }
 
         #region UnityEvent Trigger
-        public EventAction When(UnityEngine.Events.UnityEvent unityEvent)
+        public EventAction When(UnityEngine.Events.UnityEvent unityEvent, bool clearBeforeAdd = true)
         {
+            if (clearBeforeAdd) unityEvent.RemoveAllListeners();
             unityEvent.AddListener(() => { Invoke(); });
             return this;
         }
 
-        public EventAction When<T>(UnityEngine.Events.UnityEvent<T> unityEvent)
+        public EventAction When<T>(UnityEngine.Events.UnityEvent<T> unityEvent, bool clearBeforeAdd = true)
         {
+            if (clearBeforeAdd) unityEvent.RemoveAllListeners();
             unityEvent.AddListener((T t) => { Invoke(t); });
             return this;
         }
 
-        public EventAction When<T, V>(UnityEngine.Events.UnityEvent<T, V> unityEvent)
+        public EventAction When<T, V>(UnityEngine.Events.UnityEvent<T, V> unityEvent, bool clearBeforeAdd = true)
         {
+            if (clearBeforeAdd) unityEvent.RemoveAllListeners();
             unityEvent.AddListener((T t, V v) => { Invoke(t, v); });
             return this;
         }
 
-        public EventAction When<T, V, U>(UnityEngine.Events.UnityEvent<T, V, U> unityEvent)
+        public EventAction When<T, V, U>(UnityEngine.Events.UnityEvent<T, V, U> unityEvent, bool clearBeforeAdd = true)
         {
+            if (clearBeforeAdd) unityEvent.RemoveAllListeners();
             unityEvent.AddListener((T t, V v, U u) => { Invoke(t, v, u); });
             return this;
         }
 
-        public EventAction When<T, V, U, W>(UnityEngine.Events.UnityEvent<T, V, U, W> unityEvent)
+        public EventAction When<T, V, U, W>(UnityEngine.Events.UnityEvent<T, V, U, W> unityEvent, bool clearBeforeAdd = true)
         {
+            if (clearBeforeAdd) unityEvent.RemoveAllListeners();
             unityEvent.AddListener((T t, V v, U u, W w) => { Invoke(t, v, u, w); });
             return this;
         }

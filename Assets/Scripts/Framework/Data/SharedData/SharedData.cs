@@ -7,112 +7,91 @@ namespace FrameWork
 {
     public class SharedData : Singleton<SharedData>
     {
-        private Type typeofInt = typeof(int);
-        private Type typeofFloat = typeof(float);
-        private Type typeofBool = typeof(bool);
-        private Type typeofString = typeof(string);
-
-        // data that associate with and id.
-        private Dictionary<int, DataListener> mappedData;
+        // provide easy access to named data
+        private Dictionary<string, DataListener> mappedData;
         // global data
         private DataListener globalData;
 
         public override void Init()
         {
+            mappedData = new Dictionary<string, DataListener>();
             globalData = new DataListener("Global");
         }
-
-        public int this[string key, int defaultVal]
+        
+        #region Global Data
+        public object this[string key]
         {
             get
             {
-                return globalData[key, defaultVal];
+                return globalData[key];
             }
             set
             {
-                globalData[key, defaultVal] = value;
+                globalData[key] = value;
             }
         }
 
-        public float this[string key, float defaultVal]
+        public void RegisterGlobalData<T>(string key, T val) 
         {
-            get
-            {
-                return globalData[key, defaultVal];
-            }
-            set
-            {
-                globalData[key, defaultVal] = value;
-            }
-        }
-
-        public bool this[string key, bool defaultVal]
-        {
-            get
-            {
-                return globalData[key, defaultVal];
-            }
-            set
-            {
-                globalData[key, defaultVal] = value;
-            }
-        }
-
-        public string this[string key, string defaultVal]
-        {
-            get
-            {
-                return globalData[key, defaultVal];
-            }
-            set
-            {
-                globalData[key, defaultVal] = value;
-            }
-        }
-
-        public void RegisterGlobalData<T>(string key, T val) where T:struct
-        {
-            Type typeofT = typeof(T);
-            if (typeofT == typeofInt)
-            {
-                globalData.RegisterAttr(key, Convert.ToInt32(val));
-            }
-            else if (typeofT == typeofFloat)
-            {
-                globalData.RegisterAttr(key, Convert.ToSingle(val));
-            }
-            else if (typeofT == typeofBool)
-            {
-                globalData.RegisterAttr(key, Convert.ToBoolean(val));
-            }
-            else if (typeofT == typeofString)
-            {
-                globalData.RegisterAttr(key, Convert.ToString(val));
-            }
-            else
-            {
-                Debug.LogErrorFormat("[DataListener] {0} type not supported.", typeofT.ToString());
-            }
+            globalData.RegisterAttr(key, val);
         }
 
         public void AddGlobalListener<T>(string key, Action<T> onValueChanged)
         {
-            EventListener.Do<T>(onValueChanged).When(string.Format("{0}_{1}", "Global", key));
+            globalData.RegisterEvent<T>(key, onValueChanged);
+            //EventListener.Do<T>(onValueChanged).When(string.Format("{0}_{1}", "Global", key));
         }
 
         public void RemoveGlobalListener<T>(string key, Action<T> onValueChanged)
         {
-            EventListener.Undo<T>(string.Format("{0}_{1}", "Global", key), onValueChanged);
+            globalData.UnRegisterEvent<T>(key, onValueChanged);
+            //EventListener.Undo<T>(string.Format("{0}_{1}", "Global", key), onValueChanged);
+        }
+        #endregion
+
+        #region Independent Data
+        public DataListener NewData(string name)
+        {
+            if (!mappedData.ContainsKey(name))
+            {
+                mappedData.Add(name, new DataListener());
+            }
+
+            return mappedData[name];
         }
 
-        public void AddListener<T>(int id, string key, Action<T> onValueChanged)
+        public DataListener GetData(string name)
         {
-            EventListener.Do<T>(onValueChanged).When(string.Format("{0}_{1}", id, key));
+            if (mappedData.ContainsKey(name)) return mappedData[name];
+
+            return null;
         }
 
-        public void RemoveListener<T>(int id, string key, Action<T> onValueChanged)
+        public void DeleteData(string name)
         {
-            EventListener.Undo<T>(string.Format("{0}_{1}", id, key), onValueChanged);
+            if (mappedData.ContainsKey(name))
+            {
+                mappedData.Remove(name);
+            }
         }
+
+        public void AddListener<T>(string name, string key, Action<T> onValueChanged)
+        {
+            //EventListener.Do<T>(onValueChanged).When(string.Format("{0}_{1}", id, key));
+            if (mappedData.ContainsKey(name))
+            {
+                mappedData[name].RegisterEvent(key, onValueChanged);
+            }
+        }
+
+        public void RemoveListener<T>(string name, string key, Action<T> onValueChanged)
+        {
+            //EventListener.Undo<T>(string.Format("{0}_{1}", id, key), onValueChanged);
+            if (mappedData.ContainsKey(name))
+            {
+                mappedData[name].UnRegisterEvent(key, onValueChanged);
+            }
+        }
+        #endregion
     }
 }

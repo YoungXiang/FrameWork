@@ -15,7 +15,7 @@ public class UILayer
 
 public class UIManager : SingleBehaviour<UIManager>
 {
-    internal string PrefabUrl = "Assets/Res/UI/Prefabs/{0}.prefab";
+    internal const string PrefabUrl = "Assets/Res/UI/Prefabs/{0}.prefab";
     
     #region Engine Callbacks
     void Awake()
@@ -87,13 +87,14 @@ public class UIManager : SingleBehaviour<UIManager>
         }
     }
 #endif
-#endregion
+    #endregion
 
+    #region Private Methods
     void SetupBuiltingLayers()
     {
     }
     
-    public void NewLayer(int layerLevel, string layerName)
+    void NewLayer(int layerLevel, string layerName)
     {
         GameObject layer = new GameObject(layerName);
         layer.transform.SetParent(transform, false);
@@ -119,6 +120,30 @@ public class UIManager : SingleBehaviour<UIManager>
         uiLayers.Add(layerLevel, layer);
     }
 
+    void SortSiblingUnderLayer(int layer)
+    {
+        int childCount = uiLayers[layer].transform.childCount;
+        List<string> uiStateNames = new List<string>(childCount);
+        for (int i = 0; i < childCount; i++)
+        {
+            uiStateNames.Add(uiLayers[layer].transform.GetChild(i).name);
+        }
+
+        // return 1 if a > b;
+        //       -1 if a < b;
+        uiStateNames.Sort((string a, string b) =>
+        {
+            return uiStates[a].sortingOrder - uiStates[b].sortingOrder;
+        });
+
+        for (int i = 0; i < childCount; i++)
+        {
+            uiStates[uiStateNames[i]].transform.SetSiblingIndex(childCount - i);
+        }
+    }
+    #endregion
+
+    #region Public API
     /// <summary>
     /// Instantiate ui prefab and show
     /// The main purpose of UIManager is to load the prefab.
@@ -172,28 +197,6 @@ public class UIManager : SingleBehaviour<UIManager>
             uiStates[uiStateName].ChangeState(showState);
     }
 
-    void SortSiblingUnderLayer(int layer)
-    {
-        int childCount = uiLayers[layer].transform.childCount;
-        List<string> uiStateNames = new List<string>(childCount);
-        for (int i = 0; i < childCount; i++)
-        {
-            uiStateNames.Add(uiLayers[layer].transform.GetChild(i).name);
-        }
-
-        // return 1 if a > b;
-        //       -1 if a < b;
-        uiStateNames.Sort((string a, string b) => 
-        {
-            return uiStates[a].sortingOrder - uiStates[b].sortingOrder;
-        });
-
-        for (int i = 0; i < childCount; i++)
-        {
-            uiStates[uiStateNames[i]].transform.SetSiblingIndex(childCount - i);
-        }
-    }
-
     public void Hide(string uiStateName, string hideState)
     {
         if (!uiStates.ContainsKey(uiStateName))
@@ -236,10 +239,10 @@ public class UIManager : SingleBehaviour<UIManager>
             uiLayers[layer].SetActive(active);
         }
     }
+    #endregion
 
     /////////////////////////////////////////////////////////////////////////
-
-#region Public variables
+    #region Public variables
     [Tooltip("Canvas Scaler - Reference Resolution (X)")]
     public float ResolutionWidth = 1536.0f;
     [Tooltip("Canvas Scaler - Reference Resolution (Y)")]
@@ -249,10 +252,10 @@ public class UIManager : SingleBehaviour<UIManager>
     public EventSystem eventSystem;
 #endregion
 
-#region Privates
+    #region Private variables
     Dictionary<string, UIStateMachine> uiStates = new Dictionary<string, UIStateMachine>();
     List<string> unloadWhenSceneUnloadList = new List<string>();
 
     Dictionary<int, GameObject> uiLayers = new Dictionary<int, GameObject>();
-#endregion
+    #endregion
 }

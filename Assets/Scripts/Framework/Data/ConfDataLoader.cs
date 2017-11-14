@@ -75,8 +75,7 @@ namespace FrameWork
 
         public override void Init()
         {
-            Add(new SerializedData<ClothCategoryData>());
-            Add(new SerializedData<ClothTemplateData>());
+            //Add(new SerializedData<ClothCategoryData>());
         }
 
         void Add(ISerializedData data)

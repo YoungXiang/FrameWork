@@ -53,6 +53,8 @@ namespace FrameWork
 
         public bool BuildAssets()
         {
+            LogUtil.LogColor(LogUtil.Color.yellow, "[Build] Build for target platform = {0}", EditorUserBuildSettings.activeBuildTarget.ToString());
+
             AssetBundleManifestNew manifest = new AssetBundleManifestNew();
             PreBuildAsset(manifest);
 
@@ -66,11 +68,16 @@ namespace FrameWork
 
             AssetBundleManifest unityManifest = BuildPipeline.BuildAssetBundles(assetBundleOutputPath, buildMap,
                 BuildAssetBundleOptions.ChunkBasedCompression,
-                GetBuildTarget());
+                EditorUserBuildSettings.activeBuildTarget);
 
-            PostBuildAsset(manifest, unityManifest);
-            SetDirty(false);
-            return true;
+            if (unityManifest != null)
+            {
+                PostBuildAsset(manifest, unityManifest);
+                SetDirty(false);
+                return true;
+            }
+
+            return false;
         }
 
         public bool BuildAssetsForSimulation()
@@ -138,9 +145,112 @@ namespace FrameWork
         /// </summary>
         void PostBuildAsset(AssetBundleManifestNew manifest, AssetBundleManifest unityManifest)
         {
+#if UNITY_2017
             Caching.ClearCache();
+#else 
+            Caching.CleanCache();
+#endif
             AssetDatabase.RemoveUnusedAssetBundleNames();
 
+            AssetBundleManifestNew serverManifest = IOUtils.DeserializeObjectFromFile<AssetBundleManifestNew>(serverAssetBundleOutputPath + "AssetManifest.manifest");
+
+            int current = 0;
+            bool hasServerAssetBundle = false;
+            foreach (int bundleHash in manifest.assetBundleConfig.Keys)
+            {
+                AssetBundleConfig conf = manifest.assetBundleConfig[bundleHash];
+                string bundleFullPath = Path.Combine(assetBundleOutputPath, conf.bundlePath);
+
+                EditorUtility.DisplayProgressBar("Post build", conf.bundlePath, (float)(current/manifest.assetBundleConfig.Count));
+                current++;
+
+                byte[] encryptedBytes = IOUtils.EncryptBytes(IOUtils.LoadBytesFromFile(bundleFullPath));
+                conf.md5 = IOUtils.ComputeMD5(encryptedBytes);
+
+                string[] strDependencies = unityManifest.GetDirectDependencies(conf.bundlePath);
+                if (strDependencies.Length > 0)
+                {
+                    conf.dependencies = new int[strDependencies.Length];
+                    for (int i = 0; i < strDependencies.Length; i++)
+                    {
+                        int bundleDepenHash = strDependencies[i].GetHashCode();
+                        conf.dependencies[i] = bundleDepenHash;
+                    }
+                }
+
+                // compare with server
+                if (!conf.isBuiltIn)
+                {
+                    hasServerAssetBundle = true;
+                    string bundleServerPath = serverAssetBundleOutputPath + conf.bundlePath;
+                    if (!File.Exists(bundleServerPath) || serverManifest == null)
+                    {
+                        conf.version = 0;
+                    }
+                    else
+                    {
+                        byte[] serverEncryptedBytes = IOUtils.EncryptBytes(IOUtils.LoadBytesFromFile(bundleServerPath));
+                        string md5 = IOUtils.ComputeMD5(serverEncryptedBytes);
+                        if (!md5.Equals(conf.md5))
+                        {
+                            AssetBundleConfig oldConfig = serverManifest.GetBundleConfig(bundleHash);
+                            if (oldConfig == null)
+                            {
+                                conf.version = 0;
+                            }
+                            else
+                            {
+                                int cachedVersion = oldConfig.version;
+                                conf.version = cachedVersion + 1;
+                            }
+                        }
+                    }
+
+                    // move bundle to new path
+                    IOUtils.DeleteFileIfExists(bundleServerPath);
+                    IOUtils.CreateDirectoryIfNotExist(Path.GetDirectoryName(bundleServerPath));
+                    File.Move(bundleFullPath, bundleServerPath);
+                    IOUtils.DeleteFileIfExists(bundleFullPath);
+                }
+                else
+                {
+                    conf.version = 0;
+                }
+            }
+
+            if (hasServerAssetBundle)
+            {
+                // delete empty directories
+                RemoveEmptyDirectories(assetBundleOutputPath);
+            }
+
+            for (int i = 0; i < parser.parsedList.Count; i++)
+            {
+                EditorUtility.DisplayProgressBar("Post build", "Finalizing", ((float)i / (float)parser.parsedList.Count));
+
+                BuildRuleParser.Parsed parsed = parser.parsedList[i];
+                int bundleHash = parsed.assetBundleName.GetHashCode();
+
+                if (!manifest.assetBundleConfig.ContainsKey(bundleHash)) continue;
+
+                for (int a = 0; a < parsed.assetFiles.Length; a++)
+                {
+                    manifest.assetsInBundle.Add(parsed.assetFiles[a], bundleHash);
+                }
+            }
+
+            IOUtils.SerializeObjectToFile(Path.Combine(assetBundleOutputPath, "AssetManifest.manifest"), manifest);
+
+            // for debugging
+            string txtPath = Path.Combine(assetBundleOutputPath, "AssetManifest.txt");
+            if (File.Exists(txtPath)) File.Delete(txtPath);
+            IOUtils.CreateDirectoryIfNotExist(Path.GetDirectoryName(txtPath));
+            File.WriteAllText(txtPath, manifest.ToString());
+
+            EditorUtility.ClearProgressBar();
+
+            LogUtil.LogColor(LogUtil.Color.yellow, "[Build] : Success!");
+#region Obsoleted 
             /*
             AssetBundleConfig abConf = manifest.assetBundleConfig[bundleHash];
             byte[] encryptedBytes = AssetUtils.EncryptBytes(AssetUtils.LoadSerializable(bundleFullPath));
@@ -227,7 +337,31 @@ namespace FrameWork
             {
                 abConf.version = 0;
             }
-             */
+            */
+#endregion
+        }
+
+        void RemoveEmptyDirectories(string rootDirectory)
+        {
+            string[] directories = Directory.GetDirectories(rootDirectory, "*", SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < directories.Length; i++)
+            {
+                string[] subdirectories = Directory.GetDirectories(directories[i]);
+                if (subdirectories.Length > 0)
+                {
+                    for (int s = 0; s < subdirectories.Length; s++)
+                    {
+                        RemoveEmptyDirectories(subdirectories[s]);
+                    }
+                }
+                else
+                {
+                    if (Directory.GetFiles(directories[i]).Length <= 0)
+                    {
+                        Directory.Delete(directories[i]);
+                    }
+                }
+            }
         }
 
         void PostBuildAssetSimulation(AssetBundleManifestNew manifest)
@@ -253,9 +387,9 @@ namespace FrameWork
             IOUtils.CreateDirectoryIfNotExist(Path.GetDirectoryName(txtPath));
             File.WriteAllText(txtPath, manifest.ToString());
 
-            Debug.Log("Build Success! (Simulation)");
+            LogUtil.LogColor(LogUtil.Color.yellow, "[Build] : Success! (Simulation)");
         }
-        #endregion
+#endregion
 
         public static BuildTarget GetBuildTarget()
         {

@@ -1,5 +1,13 @@
 {
-  "rules":[
+  "rules": [
+    {
+      "ruleName": "UI-Common",
+      "filterPath": "Assets/Res/UI/Common/*.*",
+      "includePath": "",
+      "ignorePath": "",
+      "assetBundleName": "ui/common.unity3d",
+      "isBuiltIn": true
+    },
     {
       "ruleName": "UI-Prefabs",
       "filterPath": "Assets/Res/UI/Prefabs/{fileName}.*",

@@ -51,16 +51,17 @@ namespace FrameWork
             for (int i = 0; i < ruleJson.rules.Length; i++)
             {
                 parsedList.AddRange(ParseSingleRule(ruleJson.rules[i]));
+                LogUtil.LogColor(LogUtil.Color.yellow, "[Build] : Build rule = [{0}] parsed.", ruleJson.rules[i].ruleName);
             }
             
             for (int p = 0; p < parsedList.Count; p++)
             {
                 parsedList[p].assetBundleName = parsedList[p].assetBundleName.ToLower();
-                LogUtil.LogColor(LogUtil.Color.yellow, "AssetBundleName : [{0}]", parsedList[p].assetBundleName);
+                //LogUtil.LogColor(LogUtil.Color.yellow, "AssetBundleName : [{0}]", parsedList[p].assetBundleName);
                 for (int i = 0; i < parsedList[p].assetFiles.Length; i++)
                 {
                     parsedList[p].assetFiles[i] = parsedList[p].assetFiles[i].Replace("\\", "/").ToLower();
-                    Debug.LogFormat("AssetFiles : {0}", parsedList[p].assetFiles[i]);
+                    //Debug.LogFormat("AssetFiles : {0}", parsedList[p].assetFiles[i]);
                 }
             }
         }

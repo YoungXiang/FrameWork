@@ -66,7 +66,7 @@ namespace JsonSharp
             }
             catch (Exception e)
             {
-                Console.WriteLine("[ObjectFill] Failed.");
+                Console.WriteLine("[ObjectFill] Failed. Fill {0} with {1}", fieldName, fieldValue);
                 Console.WriteLine(e.Message);
             }
         }

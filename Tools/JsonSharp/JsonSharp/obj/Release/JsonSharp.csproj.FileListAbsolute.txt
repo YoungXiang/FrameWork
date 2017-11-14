@@ -33,4 +33,3 @@ D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\System.Va
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\Excel.pdb
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\MessagePack.xml
 D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\bin\Release\System.Threading.Tasks.Extensions.xml
-D:\_OnlineRepo\_GitHub\FrameWork\Tools\JsonSharp\JsonSharp\obj\Release\JsonSharp.csprojResolveAssemblyReference.cache
