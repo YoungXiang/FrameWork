@@ -4,8 +4,13 @@ using System.Linq;
 
 namespace FrameWork
 {
+    /// <summary>
+    /// A Generic Pool
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Pool<T> where T:new()
     {
+        // it's actually better to use int(like InstanceID) as the Key, that provides easier compare.
         Dictionary<T, bool> used;
         Dictionary<T, bool> unused;
         
@@ -75,7 +80,9 @@ namespace FrameWork
         {
             if (unused.Count <= 0)
             {
-                unused.Add(NewInstance(), true);
+                T o = NewInstance();
+                used.Add(o, true);
+                return o;
             }
             
             T obj = unused.First().Key;

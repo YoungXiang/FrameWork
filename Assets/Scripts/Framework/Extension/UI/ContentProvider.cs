@@ -66,7 +66,7 @@ namespace FrameWork
             m_ItemSize = new Vector2(templateRect.rect.width, templateRect.rect.height);
             template.SetActive(false);
             // make template as my child, so that template is accessable in OnDestroy;
-            template.transform.SetParent(transform, false);
+            //template.transform.SetParent(transform, false);
         }
     }
 
@@ -80,7 +80,11 @@ namespace FrameWork
         [Tooltip("Items")]
         public ItemType[] items;
 
+        [Tooltip("Either to pool the elements or not.")]
         public bool usePool = false;
+        [Tooltip("This is only relevant when usePool is checked!")]
+        public int poolSize = 10;
+        protected UnityObjectPool<GameObject> objectPool;
         
         public virtual void SetupDatas(DataType[] datas_)
         {
@@ -88,7 +92,23 @@ namespace FrameWork
             if (check == null)
             {
                 Debug.LogError("Template does not have the correct ItemType component!");
+                return;
             }
+
+            #region Pool Initialization
+            if (usePool)
+            {
+                objectPool = new UnityObjectPool<GameObject>(poolSize);
+                objectPool.createDelegate = () =>
+                {
+                    return Instantiate(template, transform, false);
+                };
+                objectPool.deleteDelegate = (GameObject item) =>
+                {
+                    Destroy(item);
+                };
+            }
+            #endregion
 
             datas = datas_;
             if (items == null || items.Length != datas.Length)
@@ -100,8 +120,9 @@ namespace FrameWork
                         items[i].Clean();
                         if (usePool)
                         {
-                            // recycle old
-                            PrefabPool.Instance.Recycle(template, items[i].gameObject);
+                            // recycle item
+                            items[i].gameObject.SetActive(false);
+                            objectPool.Recycle(items[i].gameObject);
                         }
                         else
                         {
@@ -152,9 +173,8 @@ namespace FrameWork
 
         protected virtual ItemType NewItem()
         {
-            // Using prefab pool
-            GameObject instanced = usePool ? PrefabPool.Instance.Instantiate(template) : Instantiate(template);
-            instanced.transform.SetParent(transform, false);
+            GameObject instanced = usePool ? objectPool.Create() : Instantiate(template, transform, false);
+            instanced.SetActive(true);
             return instanced.GetComponent<ItemType>();
         }
         
@@ -162,10 +182,7 @@ namespace FrameWork
         {
             if (usePool)
             {
-                if (PrefabPool.Instance != null)
-                {
-                    PrefabPool.Instance.Destroy(template);
-                }
+                objectPool.Destroy();
             }
         }
     }

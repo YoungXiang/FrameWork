@@ -1,30 +1,34 @@
-using UnityEngine;       
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-namespace ListView
+namespace FrameWork
 {
-    public class ListViewController : ListViewController<ListViewItemInspectorData, ListViewItem>
+    public abstract class CanvasListViewControllerBase : UIBehaviour
     {
-    }
-
-    public abstract class ListViewControllerBase : MonoBehaviour
-    {
-        //Public variables
-        [Tooltip("Distance (in meters) we have scrolled from initial position")]
+        [Tooltip("Either be horizontal or vertical")]
+        public bool horizontal = true;
+        [Tooltip("Distance we have scrolled from initial position")]
         public float scrollOffset;
-        [Tooltip("Padding (in meters) between items")]
-        public float padding = 0.01f;
-        [Tooltip("Width (in meters) of visible region")]
-        public float range = 1;
+        [Tooltip("Padding (in pixels) between items")]
+        public int padding = 5;
         [Tooltip("Item temlate prefabs (at least one is required)")]
         public GameObject[] templates;
+
+        [System.NonSerialized]
+        public bool isScrolling = false;
 
         //Protected variables
         protected int m_DataOffset;
         protected int m_NumItems;
         protected Vector3 m_LeftSide;
         protected Vector3 m_ItemSize;
-        protected readonly Dictionary<string, ListViewItemTemplate> m_Templates = new Dictionary<string, ListViewItemTemplate>();
+        protected readonly Dictionary<string, CanvasListViewItemTemplate> m_Templates = new Dictionary<string, CanvasListViewItemTemplate>();
+
+        protected float range;
+        protected RectTransform rect;
 
         //Public properties
         public Vector3 itemSize
@@ -32,14 +36,26 @@ namespace ListView
             get { return m_ItemSize; }
         }
 
-        void Start()
+        //Protected properties
+        protected Vector3 axisVector3
         {
+            get { return horizontal ? Vector3.left : Vector3.up; }
+        }
+
+        protected float itemAxisRange
+        {
+            get { return horizontal ? m_ItemSize.x : m_ItemSize.y; }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
             Setup();
         }
 
         void Update()
         {
-            ViewUpdate();
+            if (isScrolling) ViewUpdate();
         }
 
         protected virtual void Setup()
@@ -52,8 +68,16 @@ namespace ListView
             {
                 if (m_Templates.ContainsKey(template.name))
                     Debug.LogError("Two templates cannot have the same name");
-                m_Templates[template.name] = new ListViewItemTemplate(template);
+                m_Templates[template.name] = new CanvasListViewItemTemplate(template);
             }
+
+            rect = transform as RectTransform;
+            Vector3 bound = rect.GetBounds().size;
+            range = horizontal ? bound.x : bound.y;
+
+            PreComputeConditions();
+            // update once.
+            ViewUpdate();
         }
 
         protected virtual void ViewUpdate()
@@ -62,57 +86,67 @@ namespace ListView
             UpdateItems();
         }
 
-        protected virtual void ComputeConditions()
+        protected virtual void PreComputeConditions()
         {
             if (templates.Length > 0)
             {
                 //Use first template to get item size
                 m_ItemSize = GetObjectSize(templates[0]);
             }
+
             //Resize range to nearest multiple of item width
-            m_NumItems = Mathf.RoundToInt(range / m_ItemSize.x); //Number of cards that will fit
-            range = m_NumItems * m_ItemSize.x;
+            m_NumItems = Mathf.RoundToInt(range / itemAxisRange); 
+            range = m_NumItems * itemAxisRange;
 
-            //Get initial conditions. This procedure is done every frame in case the collider bounds change at runtime
-            m_LeftSide = transform.position + Vector3.left * range * 0.5f;
+            // Add plus 1, so that our list will behave properly
+            m_NumItems++;
 
-            m_DataOffset = (int) (scrollOffset / itemSize.x);
-            if (scrollOffset < 0)
-                m_DataOffset--;
+            //Get initial conditions.
+            //Make sure the left side add 1 more itemAxisRange so that it behaves properly
+            m_LeftSide = transform.position + axisVector3 * (range + itemAxisRange) * 0.5f;
+        }
+
+        protected virtual void ComputeConditions()
+        {
+            m_DataOffset = (int)(scrollOffset / itemAxisRange);
+            //if (scrollOffset < 0) m_DataOffset--;
+
+            //Debug.LogFormat("ScrollOffset : {0}, itemSize : {1}, dataOffset : {2}", 
+            //    scrollOffset, itemAxisRange, m_DataOffset);
         }
 
         protected abstract void UpdateItems();
 
         public virtual void ScrollNext()
         {
-            scrollOffset += m_ItemSize.x;
+            scrollOffset += itemAxisRange;
         }
 
         public virtual void ScrollPrev()
         {
-            scrollOffset -= m_ItemSize.x;
+            scrollOffset -= itemAxisRange;
         }
 
         public virtual void ScrollTo(int index)
         {
-            scrollOffset = index * itemSize.x;
+            scrollOffset = index * itemAxisRange;
         }
 
         protected virtual void Positioning(Transform t, int offset)
         {
-            t.position = m_LeftSide + (offset * m_ItemSize.x + scrollOffset) * Vector3.right;
+            t.position = m_LeftSide + ((offset + 1) * itemAxisRange + scrollOffset) * (-axisVector3);
         }
 
         protected virtual Vector3 GetObjectSize(GameObject g)
         {
-            Vector3 itemSize = Vector3.one;
-            //TODO: Better method for finding object size
-            Renderer rend = g.GetComponentInChildren<Renderer>();
-            if (rend)
+            var itemSize = Vector3.one;
+            var rect = g.transform as RectTransform;
+            if (rect != null)
             {
-                itemSize.x = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).x * 2 + padding;
-                itemSize.y = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).y * 2 + padding;
-                itemSize.z = Vector3.Scale(g.transform.lossyScale, rend.bounds.extents).z * 2 + padding;
+                Vector3 bound = rect.GetBounds().size;
+                itemSize.x = bound.x + padding;
+                itemSize.y = bound.y + padding;
+                itemSize.z = 0.0f;
             }
             return itemSize;
         }
@@ -126,9 +160,9 @@ namespace ListView
         }
     }
 
-    public abstract class ListViewController<DataType, ItemType> : ListViewControllerBase
-        where DataType : ListViewItemData
-        where ItemType : ListViewItem<DataType>
+    public abstract class CanvasListViewController<DataType, ItemType> : CanvasListViewControllerBase
+        where DataType : CanvasListViewItemData
+        where ItemType : CanvasListViewItem<DataType>
     {
         [Tooltip("Source Data")]
         public DataType[] data;
@@ -137,13 +171,17 @@ namespace ListView
         {
             for (int i = 0; i < data.Length; i++)
             {
+                // In order to make the view looks correct, we recycle the first element when it's completely out of bounds.
+                //if (i + m_DataOffset < 0)
                 if (i + m_DataOffset < 0)
                 {
                     ExtremeLeft(data[i]);
-                } else if (i + m_DataOffset > m_NumItems)
+                }
+                else if (i + m_DataOffset > m_NumItems - 1)
                 {
                     ExtremeRight(data[i]);
-                } else
+                }
+                else
                 {
                     ListMiddle(data[i], i);
                 }
@@ -186,15 +224,15 @@ namespace ListView
             ItemType item = null;
             if (m_Templates[data.template].pool.Count > 0)
             {
-                item = (ItemType) m_Templates[data.template].pool[0];
+                item = (ItemType)m_Templates[data.template].pool[0];
                 m_Templates[data.template].pool.RemoveAt(0);
 
                 item.gameObject.SetActive(true);
                 item.Setup(data);
-            } else
+            }
+            else
             {
-                item = Instantiate(m_Templates[data.template].prefab).GetComponent<ItemType>();
-                item.transform.parent = transform;
+                item = Instantiate(m_Templates[data.template].prefab, transform, false).GetComponent<ItemType>();
                 item.Setup(data);
             }
             return item;

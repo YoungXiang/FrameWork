@@ -9,7 +9,11 @@ using System.Linq;
 public class UILayer
 {
     public const int Base = 0;
-
+    /// <summary>
+    /// Performant UI design requires a balance between minimizing the cost of rebuilds 
+    /// and minimizing wasted draw calls
+    /// So, it's important not to use too many layers (canvas) in order to balance draw calls with re-batches.
+    /// </summary>
     public const int TopMost = 20;
 }
 
