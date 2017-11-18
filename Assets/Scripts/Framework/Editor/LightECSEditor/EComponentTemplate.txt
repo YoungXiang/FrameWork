@@ -1,0 +1,13 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using FrameWork;
+
+public class EComponent{@Name} : EComponent
+{
+	public EComponent{@Name}()
+	{
+		bit = {@ComponentIndex};
+	}
+
+}

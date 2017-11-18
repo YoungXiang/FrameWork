@@ -8,14 +8,20 @@ using UnityEngine;
 /// </summary>
 public class World : MonoBehaviour
 {
+    public LayerMask groundMask;
     public LayerMask unwalkableMask;
     public Vector2 worldSize;
     public float gridRadius;
+
+    protected AStarPathFinding pathFinding;
 
     Grid[,] grids;
     // radius * 2
     float gridDiameter;
     int gridNumX, gridNumY;
+    public int MaxLength { get { return gridNumX * gridNumY; } }
+
+    Vector3 worldBottomLeft;
 
     #region Private Methods
     void Start()
@@ -24,13 +30,14 @@ public class World : MonoBehaviour
         gridNumX = Mathf.RoundToInt(worldSize.x / gridDiameter);
         gridNumY = Mathf.RoundToInt(worldSize.y / gridDiameter);
         CreateGrids();
+        pathFinding = new AStarPathFinding(this);
     }
 
     void CreateGrids()
     {
         grids = new Grid[gridNumX, gridNumY];
 
-        Vector3 worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;
+        worldBottomLeft = transform.position - Vector3.right * worldSize.x / 2 - Vector3.forward * worldSize.y / 2;
 
         for (int x = 0; x < gridNumX; x++)
         {
@@ -54,7 +61,7 @@ public class World : MonoBehaviour
             foreach (Grid grid in grids)
             {
                 Gizmos.color = grid.walkable ? Color.green : Color.red;
-                Gizmos.DrawCube(grid.worldPosition, Vector3.one * (gridDiameter - 0.1f));
+                Gizmos.DrawCube(grid.worldPosition, Vector3.one * (gridDiameter - 1f));
             }
         }
     }
@@ -62,12 +69,10 @@ public class World : MonoBehaviour
 
     public Grid GridFromWorldPosition(Vector3 worldPosition_)
     {
-        float percentX = Mathf.Clamp01((worldPosition_.x + worldSize.x * 0.5f) / worldSize.x);
-        float percentY = Mathf.Clamp01((worldPosition_.y + worldSize.y * 0.5f) / worldSize.y);
-
-        int x = Mathf.RoundToInt((gridNumX - 1) * percentX);
-        int y = Mathf.RoundToInt((gridNumY - 1) * percentY);
-        return grids[x, y];
+        int percentX = Mathf.Clamp(Mathf.RoundToInt((worldPosition_.x - worldBottomLeft.x - gridRadius) / gridDiameter), 0, gridNumX - 1);
+        int percentY = Mathf.Clamp(Mathf.RoundToInt((worldPosition_.z - worldBottomLeft.z - gridRadius) / gridDiameter), 0, gridNumY - 1);
+        
+        return grids[percentX, percentY];
     }
 
     public void GetNeighbours(Grid grid_, List<Grid> outNeightbours_)
@@ -90,5 +95,10 @@ public class World : MonoBehaviour
                 
             }
         }
+    }
+
+    public void FindPath(Vector3 startPos_, Vector3 targetPos_, List<Grid> outPath_)
+    {
+        pathFinding.FindPath(startPos_, targetPos_, outPath_);
     }
 }

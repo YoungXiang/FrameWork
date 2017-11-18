@@ -143,6 +143,7 @@
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\BuildManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\BuildRule.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\AssetPipeline\IfAnyAssetImported.cs" />
+    <Compile Include="Assets\Scripts\Framework\Editor\LightECSEditor\EComponentWizard.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\HierarchyDrawer.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\NameDrawer.cs" />
     <Compile Include="Assets\Scripts\Framework\Editor\PropertyDrawer\ReadonlyDrawer.cs" />
@@ -165,6 +166,8 @@
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__SystemController-NewSystemController.cs.txt" />
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Class-NewComponent.cs.txt" />
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Struct-NewComponent.cs.txt" />
+    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\ComponentMaskTemplate.txt" />
+    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\EComponentTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
   </ItemGroup>

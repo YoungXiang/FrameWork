@@ -90,6 +90,16 @@ namespace FrameWork
             return obj;
         }
 
+        public static GameObject LoadPrefab(string assetPath, Transform parent)
+        {
+            GameObject prefab = s_loader.LoadAsset<GameObject>(assetPath);
+            GameObject obj = Object.Instantiate(prefab, parent, false);
+            obj.name = prefab.name;
+            obj.BindAsset(prefab);
+            return obj;
+        }
+
+
         /// <summary>
         /// Always destroy the previous before load another prefab instance.
         /// </summary>

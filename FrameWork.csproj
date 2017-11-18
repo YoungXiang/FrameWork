@@ -88,11 +88,13 @@
   <ItemGroup>
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Scripts\TBS_CameraMovement.cs" />
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Water\TBS_Water.cs" />
-    <Compile Include="Assets\ExampleProject01\Scripts\PathFinding\AStarPathFinding.cs" />
-    <Compile Include="Assets\ExampleProject01\Scripts\World\Node.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\TestEntityComponent.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\TestPathFind.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldAssetDefine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldGenerator.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\World\Grid.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\World\PathFinding\AStarPathFinding.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\World.cs" />
-    <Compile Include="Assets\ExampleProject01\Scripts\World\WorldAssetDefine.cs" />
-    <Compile Include="Assets\ExampleProject01\Scripts\World\WorldGenerator.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\ComponentGroup.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\ComponentSystem.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Entity.cs" />
@@ -475,6 +477,11 @@
     <Compile Include="Assets\Scripts\Framework\GameScene\SceneManager.cs" />
     <Compile Include="Assets\Scripts\Framework\GameScene\UnityScene\UnityScene.cs" />
     <Compile Include="Assets\Scripts\Framework\GameScene\VirtualScene\VirtualScene.cs" />
+    <Compile Include="Assets\Scripts\Framework\LightECS\EComponent.cs" />
+    <Compile Include="Assets\Scripts\Framework\LightECS\ESystem.cs" />
+    <Compile Include="Assets\Scripts\Framework\LightECS\ESystemManager.cs" />
+    <Compile Include="Assets\Scripts\Framework\LightECS\Entity.cs" />
+    <Compile Include="Assets\Scripts\Framework\LightECS\EntityManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationPlayable.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationPlayableParam.cs" />
@@ -507,6 +514,7 @@
     <Compile Include="Assets\Scripts\Framework\Utils\LogUtil.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Pattern\Builder.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Pattern\DictList.cs" />
+    <Compile Include="Assets\Scripts\Framework\Utils\Pattern\Heap.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Pattern\Pool.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Pattern\SingleBehaviour.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Pattern\Singleton.cs" />
@@ -528,6 +536,8 @@
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__SystemController-NewSystemController.cs.txt" />
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Class-NewComponent.cs.txt" />
     <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Struct-NewComponent.cs.txt" />
+    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\ComponentMaskTemplate.txt" />
+    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\EComponentTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
   </ItemGroup>
