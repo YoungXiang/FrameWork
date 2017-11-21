@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.2f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -84,46 +82,41 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
+    <Reference Include="BigInteger">
+      <HintPath>Assets\Plugins\Artemis_ECS\BigInteger.dll</HintPath>
+    </Reference>
+    <Reference Include="Artemis_Unity5">
+      <HintPath>Assets\Plugins\Artemis_ECS\Artemis_Unity5.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>Assets\Plugins\Artemis_ECS\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Tuples">
+      <HintPath>Assets\Plugins\Artemis_ECS\System.Tuples.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading">
+      <HintPath>Assets\Plugins\Artemis_ECS\System.Threading.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Scripts\TBS_CameraMovement.cs" />
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Water\TBS_Water.cs" />
-    <Compile Include="Assets\ExampleProject01\Scripts\TestEntityComponent.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\ComponentDefine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\MovePath.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\Velocity.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\View.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\ConfigDatas\CharacterConfig.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Entities\EntityTemplates\CharacterTemplate.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Entities\EntityWorldRegistry.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Main.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Scenes\MainScene.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Systems\MoveSystem.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\TestPathFind.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldAssetDefine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldGenerator.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\Grid.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\PathFinding\AStarPathFinding.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\World.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\ComponentGroup.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\ComponentSystem.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Entity.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\EntityManager.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Extensions\TypeExtensions.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\IComponent.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\InjectDependencyAttribute.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\InjectTupleAttribute.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\InjectableDependencyAttribute.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\InjectionManager.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\IocContainer.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\RegisteredObject.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Injection\TypeNotRegisteredException.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Observer\IMessageReceiver.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\Observer\Messanger.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Core\SystemRoot.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\ComponentWrapper.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Components\ECSAnimatorComponent.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Components\ECSTransformComponent.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\EntityManagerExtension.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\GameObjectEntity.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\NativeArray.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\ScriptBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\UnityECSController.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\UnitySystemRoot.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\DebugSystemBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\DebugSystemGroupAttribute.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\DebugSystems.cs" />
-    <Compile Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\VisualDebugging\SystemInfo.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ListView\ListViewController.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ListView\ListViewInputHandler.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\ListView\ListViewItem.cs" />
@@ -431,9 +424,7 @@
     <Compile Include="Assets\Scripts\Framework\3rdParty\UniRx\Scripts\UnityWinRTBridge\Thread.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\UniRx\Scripts\UnityWinRTBridge\ThreadPoolScheduler_UnityWinRT.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\ACaching.cs" />
-    <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\AWWW.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\AWWW.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetBundleConfig.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetLoader.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetLoaderExtend.cs" />
@@ -477,11 +468,6 @@
     <Compile Include="Assets\Scripts\Framework\GameScene\SceneManager.cs" />
     <Compile Include="Assets\Scripts\Framework\GameScene\UnityScene\UnityScene.cs" />
     <Compile Include="Assets\Scripts\Framework\GameScene\VirtualScene\VirtualScene.cs" />
-    <Compile Include="Assets\Scripts\Framework\LightECS\EComponent.cs" />
-    <Compile Include="Assets\Scripts\Framework\LightECS\ESystem.cs" />
-    <Compile Include="Assets\Scripts\Framework\LightECS\ESystemManager.cs" />
-    <Compile Include="Assets\Scripts\Framework\LightECS\Entity.cs" />
-    <Compile Include="Assets\Scripts\Framework\LightECS\EntityManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationPlayable.cs" />
     <Compile Include="Assets\Scripts\Framework\Playable\Animation\AnimationPlayableParam.cs" />
@@ -529,17 +515,9 @@
     <None Include="Assets\ExampleProject01\Downloaded\BrokenVector\FreeLowPolyPack\readme.txt" />
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyPBRShader.shader" />
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyUnlitShader.shader" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\LICENSE.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Component Class-NewComponent.cs.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Component Struct-NewComponent.cs.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__System-NewSystem.cs.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__SystemController-NewSystemController.cs.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Class-NewComponent.cs.txt" />
-    <None Include="Assets\Scripts\Framework\3rdParty\ECS\Unity\Editor\Templates\91-ECS__Wrapped Component Struct-NewComponent.cs.txt" />
-    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\ComponentMaskTemplate.txt" />
-    <None Include="Assets\Scripts\Framework\Editor\LightECSEditor\EComponentTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
+    <None Include="Assets\StreamingAssets\AssetBundle\Windows\AssetManifest.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -8,11 +8,11 @@ namespace FrameWork
     {
         public class _Pool : Pool<GameObject>
         {
-            public GameObject prefab;
+            public string prefabPath;
 
             public override GameObject NewInstance()
             {
-                GameObject go = Object.Instantiate(prefab);
+                GameObject go = AssetManager.LoadPrefab(prefabPath);
                 return go;
             }
 
@@ -23,42 +23,42 @@ namespace FrameWork
         }
 
 
-        private Dictionary<GameObject, _Pool> prefabPool = new Dictionary<GameObject, _Pool>();
+        private Dictionary<string, _Pool> prefabPool = new Dictionary<string, _Pool>();
 
-        public GameObject Instantiate(GameObject prefab)
+        public GameObject Instantiate(string prefabPath)
         {
-            if (!prefabPool.ContainsKey(prefab))
+            if (!prefabPool.ContainsKey(prefabPath))
             {
-                prefabPool.Add(prefab, new _Pool());
-                prefabPool[prefab].prefab = prefab;
+                prefabPool.Add(prefabPath, new _Pool());
+                prefabPool[prefabPath].prefabPath = prefabPath;
             }
 
-            GameObject instance = prefabPool[prefab].Create();
+            GameObject instance = prefabPool[prefabPath].Create();
             instance.SetActive(true);
             return instance;
         }
 
-        public void Recycle(GameObject prefab, GameObject instance)
+        public void Recycle(string prefabPath, GameObject instance)
         {
-            if (prefabPool.ContainsKey(prefab))
+            if (prefabPool.ContainsKey(prefabPath))
             {
-                prefabPool[prefab].Recycle(instance);
+                prefabPool[prefabPath].Recycle(instance);
                 instance.SetActive(false);
                 instance.transform.SetParent(transform, false);
             }
         }
 
-        public void Destroy(GameObject prefab)
+        public void Destroy(string prefabPath)
         {
-            if (prefabPool.ContainsKey(prefab))
+            if (prefabPool.ContainsKey(prefabPath))
             {
-                prefabPool[prefab].Destroy();
+                prefabPool[prefabPath].Destroy();
             }
         }
         
         public override void OnDestroy()
         {
-            foreach(GameObject prefab in prefabPool.Keys)
+            foreach(string prefab in prefabPool.Keys)
             {
                 prefabPool[prefab].Destroy();
             }

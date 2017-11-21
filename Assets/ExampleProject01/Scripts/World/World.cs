@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
 /// A world is defined as a group of tiles or grids, and extra info on each grid.
 /// </summary>
@@ -13,6 +12,11 @@ public class World : MonoBehaviour
     public Vector2 worldSize;
     public float gridRadius;
 
+#if GROUND_HEIGHT
+    public float highest = 100.0f;
+    public float lowest = -100.0f;
+#endif
+
     protected AStarPathFinding pathFinding;
 
     Grid[,] grids;
@@ -22,7 +26,7 @@ public class World : MonoBehaviour
     public int MaxLength { get { return gridNumX * gridNumY; } }
 
     Vector3 worldBottomLeft;
-
+    
     #region Private Methods
     void Start()
     {
@@ -48,6 +52,16 @@ public class World : MonoBehaviour
                 grids[x, y] = new Grid(walkable, worldPoint);
                 grids[x, y].xCoord = x;
                 grids[x, y].yCoord = y;
+
+#if GROUND_HEIGHT
+                // ground height                
+                worldPoint.y = highest;
+                RaycastHit hitInfo;
+                if (Physics.Raycast(worldPoint, Vector3.down, out hitInfo, highest - lowest + 1.0f, groundMask))
+                {
+                    grids[x, y].groundHeight = hitInfo.point.y;
+                }
+#endif
             }
         }
     }
@@ -65,7 +79,7 @@ public class World : MonoBehaviour
             }
         }
     }
-    #endregion
+#endregion
 
     public Grid GridFromWorldPosition(Vector3 worldPosition_)
     {

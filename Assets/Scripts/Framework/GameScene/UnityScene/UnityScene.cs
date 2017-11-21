@@ -31,7 +31,7 @@ namespace FrameWork
                     }
                 }
             });
-            AssetManager.LoadScene(path);
+            AssetManager.LoadScene(path, true);
         }
 
         public sealed override void Unload()

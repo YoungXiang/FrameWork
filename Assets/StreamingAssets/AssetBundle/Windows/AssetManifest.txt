@@ -1,0 +1,7 @@
+scene/mainscene.unity3d,[Version<0>],dependency : 	
+entity/player/1001.unity3d,[Version<0>],dependency : 	
+entity/monster/10001.unity3d,[Version<0>],dependency : 	
+assets/exampleproject01/res/_scenes/mainscene.unity, scene/mainscene.unity3d, 	
+assets/exampleproject01/res/entities/player/1001/player.prefab, entity/player/1001.unity3d, 	
+assets/exampleproject01/res/entities/player/1001/materials/player_normal.mat, entity/player/1001.unity3d, 	
+assets/exampleproject01/res/entities/monster/10001/targetpos.prefab, entity/monster/10001.unity3d, 	

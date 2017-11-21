@@ -75,10 +75,10 @@ namespace FrameWork
 
         public override void Init()
         {
-            //Add(new SerializedData<ClothCategoryData>());
+            //Add(new SerializedData<ClothCategoryData>());            
         }
 
-        void Add(ISerializedData data)
+        public void Add(ISerializedData data)
         {
             if (!datas.ContainsKey(data.name))
             {

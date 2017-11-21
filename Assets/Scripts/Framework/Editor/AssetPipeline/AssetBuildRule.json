@@ -1,43 +1,27 @@
 {
   "rules": [
     {
-      "ruleName": "UI-Common",
-      "filterPath": "Assets/Res/UI/Common/*.*",
-      "includePath": "",
-      "ignorePath": "",
-      "assetBundleName": "ui/common.unity3d",
-      "isBuiltIn": true
-    },
-    {
-      "ruleName": "UI-Prefabs",
-      "filterPath": "Assets/Res/UI/Prefabs/{fileName}.*",
-      "includePath": "Assets/Res/UI/Textures/{fileName}/*.*",
-      "ignorePath": "",
-      "assetBundleName": "ui/icon/{fileName}.unity3d",
-      "isBuiltIn": true
-    },
-    {
-      "ruleName": "Cloth",
-      "filterPath": "Assets/Res/Models/Wearables/Cloth/{folderName}/*.*",
-      "includePath": "",
-      "ignorePath": "",
-      "assetBundleName": "models/wearables/cloth/{folderName}.unity3d",
-      "isBuiltIn": true
-    },
-    {
       "ruleName": "MainScene",
-      "filterPath": "Assets/Res/_Scenes/MainScene.unity",
+      "filterPath": "Assets/ExampleProject01/Res/_Scenes/MainScene.unity",
       "includePath": "",
       "ignorePath": "",
       "assetBundleName": "scene/mainscene.unity3d",
       "isBuiltIn": true
     },
     {
-      "ruleName": "SingleAssets",
-      "filterPath": "Assets/Res/SingleAssets/{fileName}.*",
+      "ruleName": "Entity-Player",
+      "filterPath": "Assets/ExampleProject01/Res/Entities/Player/{folderName}/*.*",
       "includePath": "",
       "ignorePath": "",
-      "assetBundleName": "singleassets/{fileName}_{id}.unity3d",
+      "assetBundleName": "entity/player/{folderName}.unity3d",
+      "isBuiltIn": true
+    },
+    {
+      "ruleName": "Entity-Monster",
+      "filterPath": "Assets/ExampleProject01/Res/Entities/Monster/{folderName}/*.*",
+      "includePath": "",
+      "ignorePath": "",
+      "assetBundleName": "entity/monster/{folderName}.unity3d",
       "isBuiltIn": true
     }
   ]

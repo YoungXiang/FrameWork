@@ -22,8 +22,7 @@ namespace FrameWork
             for (int i = 0; i < movedAssets.Length; i++)
             {
                 Debug.Log("Moved Asset: " + movedAssets[i] + " from: " + movedFromAssetPaths[i]);
-            }
-            */
+            }*/
 
             BuildManager.Instance.SetDirty(true);
         }
