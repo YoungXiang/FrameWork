@@ -9,10 +9,10 @@ using UnityEngine;
     ResizeSize = ComponentDefine.ResizeScale)]
 public class Velocity : Artemis.ComponentPoolable
 {
-    public Vector3 value;
+    public float value;
 
     public Velocity() { }
 
-    public Velocity(Vector3 val_) { value = val_; }
+    public Velocity(float val_) { value = val_; }
     
 }

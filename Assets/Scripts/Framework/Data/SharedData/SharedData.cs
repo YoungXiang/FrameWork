@@ -36,15 +36,15 @@ namespace FrameWork
             globalData.RegisterAttr(key, val);
         }
 
-        public void AddGlobalListener<T>(string key, Action<T> onValueChanged)
+        public void AddGlobalListener(string key, Action<object> onValueChanged)
         {
-            globalData.RegisterEvent<T>(key, onValueChanged);
+            globalData.RegisterEvent(key, onValueChanged);
             //EventListener.Do<T>(onValueChanged).When(string.Format("{0}_{1}", "Global", key));
         }
 
-        public void RemoveGlobalListener<T>(string key, Action<T> onValueChanged)
+        public void RemoveGlobalListener(string key, Action<object> onValueChanged)
         {
-            globalData.UnRegisterEvent<T>(key, onValueChanged);
+            globalData.UnRegisterEvent(key, onValueChanged);
             //EventListener.Undo<T>(string.Format("{0}_{1}", "Global", key), onValueChanged);
         }
         #endregion

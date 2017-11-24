@@ -155,6 +155,8 @@ namespace FrameWork
 
                 for (int i = 0; i < folders.Length; i++)
                 {
+                    filteredFiles.Clear();
+
                     string[] folderNames = folders[i].Replace("\\", "/").Split('/');
                     string folderName = folderNames[folderNames.Length - 1];
 

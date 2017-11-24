@@ -35,6 +35,8 @@ public class World : MonoBehaviour
         gridNumY = Mathf.RoundToInt(worldSize.y / gridDiameter);
         CreateGrids();
         pathFinding = new AStarPathFinding(this);
+
+        EntityWorldRegistry.Instance.gridWorld = this;
     }
 
     void CreateGrids()

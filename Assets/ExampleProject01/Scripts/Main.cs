@@ -60,6 +60,7 @@ public class Main : MonoBehaviour
 
         // Load ConfigDatas
         ConfDataLoader.Instance.Add(new SerializedData<CharacterConfigData>());
+        ConfDataLoader.Instance.Add(new SerializedData<WeaponConfigData>());
         ConfDataLoader.Instance.Load();
 
         // Init EntityWorld

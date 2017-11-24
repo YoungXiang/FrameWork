@@ -3,12 +3,16 @@ using System.Collections.Generic;
 
 namespace FrameWork
 {
+    [MessagePack.MessagePackObject]
     public class DataListener
     {
+        [MessagePack.Key(0)]
+        public string name;
+        [MessagePack.Key(1)]
         protected Dictionary<string, object> collection = new Dictionary<string, object>();
+        [MessagePack.IgnoreMember]
         protected Dictionary<string, List<Delegate>> listeners = new Dictionary<string, List<Delegate>>();
 
-        public string name;
         public DataListener()
         {
 

@@ -1,6 +1,14 @@
+ui/common.unity3d,[Version<0>],dependency : 	
+ui/uibattle.unity3d,[Version<0>],dependency : 	
+ui/uitopbar.unity3d,[Version<0>],dependency : 	
 scene/mainscene.unity3d,[Version<0>],dependency : 	
 entity/player/1001.unity3d,[Version<0>],dependency : 	
 entity/monster/10001.unity3d,[Version<0>],dependency : 	
+assets/exampleproject01/res/ui/common/materials/ui-default.mat, ui/common.unity3d, 	
+assets/exampleproject01/res/ui/common/materials/ui-fast.mat, ui/common.unity3d, 	
+assets/exampleproject01/res/ui/common/shaders/ui-fast.shader, ui/common.unity3d, 	
+assets/exampleproject01/res/ui/uibattle/uibattle.prefab, ui/uibattle.unity3d, 	
+assets/exampleproject01/res/ui/uitopbar/uitopbar.prefab, ui/uitopbar.unity3d, 	
 assets/exampleproject01/res/_scenes/mainscene.unity, scene/mainscene.unity3d, 	
 assets/exampleproject01/res/entities/player/1001/player.prefab, entity/player/1001.unity3d, 	
 assets/exampleproject01/res/entities/player/1001/materials/player_normal.mat, entity/player/1001.unity3d, 	

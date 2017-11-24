@@ -82,33 +82,58 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
-    <Reference Include="BigInteger">
-      <HintPath>Assets\Plugins\Artemis_ECS\BigInteger.dll</HintPath>
-    </Reference>
     <Reference Include="Artemis_Unity5">
       <HintPath>Assets\Plugins\Artemis_ECS\Artemis_Unity5.dll</HintPath>
+    </Reference>
+    <Reference Include="BigInteger">
+      <HintPath>Assets\Plugins\Artemis_ECS\BigInteger.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>Assets\Plugins\Artemis_ECS\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="System.Tuples">
-      <HintPath>Assets\Plugins\Artemis_ECS\System.Tuples.dll</HintPath>
-    </Reference>
     <Reference Include="System.Threading">
       <HintPath>Assets\Plugins\Artemis_ECS\System.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Tuples">
+      <HintPath>Assets\Plugins\Artemis_ECS\System.Tuples.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Scripts\TBS_CameraMovement.cs" />
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Water\TBS_Water.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIBehaviour.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIBrain.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIRoutine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\Factor.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\ComponentDefine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\MovePath.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\Velocity.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\View.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\Weapon.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\ConfigDatas\CharacterConfig.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\ConfigDatas\WaveConfig.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\ConfigDatas\WeaponConfig.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Entities\EntityTemplates\CharacterTemplate.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Entities\EntityWorldRegistry.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Main.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\BattleIdleState.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\BattlePaused.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\BattleStarted.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\BattleStateMachine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\BattleStopped.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\Wave\Wave.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\BattleStateMachine\Wave\WaveManager.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\CameraStateMachine\CameraLeft.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\CameraStateMachine\CameraRight.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\CameraStateMachine\CameraStateMachine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\Game\GameData.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\Game\GameResource.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UIBattle\UIBattle.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UIBattle\UIBattleFinish.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UIBattle\UIBattleIdle.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UIBattle\UIBattleStart.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UITopBar\UITopBar.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UITopBar\UITopBarIdle.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Scenes\MainScene.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Systems\MoveSystem.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\TestPathFind.cs" />
@@ -436,6 +461,7 @@
     <Compile Include="Assets\Scripts\Framework\AssetManagement\LowLevelLoader\ILowLevelLoader.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\LowLevelLoader\LowLevelLoader_Android.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\LowLevelLoader\LowLevelLoader_Editor.cs" />
+    <Compile Include="Assets\Scripts\Framework\Const.cs" />
     <Compile Include="Assets\Scripts\Framework\Data\ConfDataLoader.cs" />
     <Compile Include="Assets\Scripts\Framework\Data\DataListener\DataListener.cs" />
     <Compile Include="Assets\Scripts\Framework\Data\SafeDataTypes\SafeInt.cs" />
@@ -513,6 +539,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExampleProject01\Downloaded\BrokenVector\FreeLowPolyPack\readme.txt" />
+    <None Include="Assets\ExampleProject01\Res\UI\Common\Shaders\UI-Fast.shader" />
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyPBRShader.shader" />
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyUnlitShader.shader" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />

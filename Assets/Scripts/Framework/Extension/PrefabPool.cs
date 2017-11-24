@@ -21,8 +21,7 @@ namespace FrameWork
                 Object.Destroy(obj);
             }
         }
-
-
+        
         private Dictionary<string, _Pool> prefabPool = new Dictionary<string, _Pool>();
 
         public GameObject Instantiate(string prefabPath)

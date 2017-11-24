@@ -2,7 +2,7 @@
 
 set ExcelRoot=%~dp0\Client\
 set JlsRoot=%ExcelRoot%..\..\..\Assets\StreamingAssets\ConfigDatas\
-set CsRoot=%ExcelRoot%..\..\..\Assets\Scripts\ConfigDatas\
+set CsRoot=%ExcelRoot%..\..\..\Assets\ExampleProject01\Scripts\ConfigDatas\
 
 echo 开始导表
 

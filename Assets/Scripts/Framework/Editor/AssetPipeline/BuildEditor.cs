@@ -31,12 +31,11 @@ namespace FrameWork
         public static void BuildPlayer()
         {
             InitBuildManager();
-
-            string outputPath = EditorPrefs.GetString("PlayerOutputPath", string.Empty);
+            string outputPath = EditorPrefs.GetString(playerOutputKey, string.Empty);
             if (outputPath.Length <= 0)
             {
                 outputPath = EditorUtility.OpenFolderPanel("Select Player output folder", Application.streamingAssetsPath, "");
-                if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString("PlayerOutputPath", outputPath);
+                if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString(playerOutputKey, outputPath);
             }
             BuildManager.Instance.SetPlayerOutputPath(outputPath);
             BuildManager.Instance.BuildPlayer();
@@ -46,40 +45,47 @@ namespace FrameWork
         public static void ChangePlayerPath()
         {
             string outputPath = EditorUtility.OpenFolderPanel("Select Player output folder", Application.streamingAssetsPath, "");
-            if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString("PlayerOutputPath", outputPath);
+            if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString(playerOutputKey, outputPath);
         }
 
         [MenuItem("FrameWork/Build/Select Assetbundle output folder")]
         public static void ChangeAssetBundlePath()
         {
             string outputPath = EditorUtility.OpenFolderPanel("Select Assetbundle output folder", Application.streamingAssetsPath, "");
-            if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString("AssetBundleOutputPath", outputPath);
+            if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString(outputKey, outputPath);
         }
 
         [MenuItem("FrameWork/Build/Select BuildRule")]
         public static void ChangeBuildRulePath()
         {
             string buildRulePath = EditorUtility.OpenFilePanel("Select build rule", Application.dataPath, "json");
-            if (!string.IsNullOrEmpty(buildRulePath)) EditorPrefs.SetString("AssetBundleRulePath", buildRulePath);
+            if (!string.IsNullOrEmpty(buildRulePath)) EditorPrefs.SetString(ruleKey, buildRulePath);
         }
 
         static void InitBuildManager()
         {
-            string outputPath = EditorPrefs.GetString("AssetBundleOutputPath", string.Empty);
+            string outputPath = EditorPrefs.GetString(outputKey, string.Empty);
             if (outputPath.Length <= 0)
             {
                 outputPath = EditorUtility.OpenFolderPanel("Select Assetbundle output folder", Application.streamingAssetsPath, "");
-                if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString("AssetBundleOutputPath", outputPath);
+                if (!string.IsNullOrEmpty(outputPath)) EditorPrefs.SetString(outputKey, outputPath);
             }
             BuildManager.Instance.SetAssetbundleOutputPath(outputPath);
 
-            string buildRulePath = EditorPrefs.GetString("AssetBundleRulePath", string.Empty);
+            string buildRulePath = EditorPrefs.GetString(ruleKey, string.Empty);
             if (buildRulePath.Length <= 0)
             {
                 buildRulePath = EditorUtility.OpenFilePanel("Select build rule", Application.dataPath, "json");
-                if (!string.IsNullOrEmpty(buildRulePath)) EditorPrefs.SetString("AssetBundleRulePath", buildRulePath);
+                if (!string.IsNullOrEmpty(buildRulePath)) EditorPrefs.SetString(ruleKey, buildRulePath);
             }
             BuildManager.Instance.LoadRules(buildRulePath);
+
+            LogUtil.LogColor(LogUtil.Color.yellow, "[BuildManager]- [Rule] : {0}; [OutputPath] : {1}", buildRulePath, outputPath);
         }
+
+
+        static string playerOutputKey = EditorUtils.KeyFromProduct("PlayerOutputPath");
+        static string outputKey = EditorUtils.KeyFromProduct("AssetBundleOutputPath");
+        static string ruleKey = EditorUtils.KeyFromProduct("AssetBundleRulePath");
     }
 }

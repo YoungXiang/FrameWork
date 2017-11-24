@@ -250,7 +250,7 @@ namespace FrameWork
             EditorUtility.ClearProgressBar();
 
             LogUtil.LogColor(LogUtil.Color.yellow, "[Build] : Success!");
-#region Obsoleted 
+            #region Obsoleted 
             /*
             AssetBundleConfig abConf = manifest.assetBundleConfig[bundleHash];
             byte[] encryptedBytes = AssetUtils.EncryptBytes(AssetUtils.LoadSerializable(bundleFullPath));
@@ -338,7 +338,7 @@ namespace FrameWork
                 abConf.version = 0;
             }
             */
-#endregion
+            #endregion
         }
 
         void RemoveEmptyDirectories(string rootDirectory)
@@ -372,10 +372,9 @@ namespace FrameWork
                 int bundleHash = parsed.assetBundleName.GetHashCode();
 
                 if (!manifest.assetBundleConfig.ContainsKey(bundleHash)) continue;
-
-                for (int a = 0; a < parsed.assetFiles.Length; a++)
+                for (int j = 0; j < parsed.assetFiles.Length; j++)
                 {
-                    manifest.assetsInBundle.Add(parsed.assetFiles[a], bundleHash);
+                    manifest.assetsInBundle.Add(parsed.assetFiles[j], bundleHash);
                 }
             }
 
@@ -389,7 +388,7 @@ namespace FrameWork
 
             LogUtil.LogColor(LogUtil.Color.yellow, "[Build] : Success! (Simulation)");
         }
-#endregion
+        #endregion
 
         public static BuildTarget GetBuildTarget()
         {

@@ -19,6 +19,8 @@ namespace FrameWork
         {
             DisplayWizard<StateMachineWizard>("New StateMachine", "Create");
         }
+        
+        static string saveFolderKey = EditorUtils.KeyFromProduct("StateMachineSaveFolder");
 
         public EStateMachineClassType stateMachineType = EStateMachineClassType.UIStateMachine;
         public string stateMachineName;
@@ -51,10 +53,10 @@ namespace FrameWork
                 return;
             }
 
-            string folderName = EditorUtility.OpenFolderPanel("保存位置", EditorPrefs.GetString("StateMachineSaveFolder", Application.streamingAssetsPath), "");
+            string folderName = EditorUtility.OpenFolderPanel("保存位置", EditorPrefs.GetString(saveFolderKey, Application.streamingAssetsPath), "");
             if (!string.IsNullOrEmpty(folderName))
             {
-                EditorPrefs.SetString("StateMachineSaveFolder", folderName);
+                EditorPrefs.SetString(saveFolderKey, folderName);
 
                 string finalFolder = folderName + "/" + stateMachineName;
                 IOUtils.CreateDirectoryIfNotExist(finalFolder);

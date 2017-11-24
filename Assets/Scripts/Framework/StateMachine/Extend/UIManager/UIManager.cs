@@ -18,9 +18,7 @@ public class UILayer
 }
 
 public class UIManager : SingleBehaviour<UIManager>
-{
-    internal const string PrefabUrl = "Assets/Res/UI/Prefabs/{0}.prefab";
-    
+{    
     #region Engine Callbacks
     void Awake()
     {
@@ -157,7 +155,7 @@ public class UIManager : SingleBehaviour<UIManager>
     {
         if (!uiStates.ContainsKey(uiStateName))
         {
-            GameObject go = AssetManager.LoadPrefab(string.Format(PrefabUrl, uiStateName));
+            GameObject go = AssetManager.LoadPrefab(string.Format(Const.UIPrefabUrl, uiStateName, uiStateName));
             // ensures that go has the same name as uiStateName
             go.name = uiStateName;
             UIStateMachine uiState = go.GetComponent<UIStateMachine>();
@@ -248,9 +246,9 @@ public class UIManager : SingleBehaviour<UIManager>
     /////////////////////////////////////////////////////////////////////////
     #region Public variables
     [Tooltip("Canvas Scaler - Reference Resolution (X)")]
-    public float ResolutionWidth = 1536.0f;
+    public float ResolutionWidth = Const.ReferenceWidth;
     [Tooltip("Canvas Scaler - Reference Resolution (Y)")]
-    public float ResolutionHeight = 2048.0f;
+    public float ResolutionHeight = Const.ReferenceHeight;
 
     [HideInInspector]
     public EventSystem eventSystem;

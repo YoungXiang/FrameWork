@@ -1,6 +1,14 @@
 {
   "rules": [
     {
+      "ruleName": "UI",
+      "filterPath": "Assets/ExampleProject01/Res/UI/{folderName}/*.*",
+      "includePath": "",
+      "ignorePath": "",
+      "assetBundleName": "ui/{folderName}.unity3d",
+      "isBuiltIn": true
+    },
+    {
       "ruleName": "MainScene",
       "filterPath": "Assets/ExampleProject01/Res/_Scenes/MainScene.unity",
       "includePath": "",

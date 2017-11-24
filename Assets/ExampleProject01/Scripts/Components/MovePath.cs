@@ -11,25 +11,29 @@ public class MovePath : Artemis.ComponentPoolable
 {
     public Vector3 dstPos;
     public List<Grid> path;
-    public bool reached;
+    public int currentIndex;
+    public bool reached
+    {
+        get
+        {
+            return path.Count > 0 ? currentIndex >= path.Count : false;
+        }
+    }
 
     public MovePath()
     {
         path = new List<Grid>();
-        reached = false;
     }
 
     public MovePath(Vector3 dstPos_)
     {
         dstPos = dstPos_;
         path = new List<Grid>();
-        reached = false;
     }
 
     public void SetDstPos(Vector3 dstPos_)
     {
         dstPos = dstPos_;
-        reached = false;
     }
 
     public override void CleanUp()

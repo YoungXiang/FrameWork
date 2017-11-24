@@ -12,13 +12,13 @@ public class CharacterTemplate : IEntityTemplate
 
     public Entity BuildEntity(Entity e, EntityWorld entityWorld, params object[] args)
     {
-        CharacterConfig config = EntityWorldRegistry.Instance.charConfigs[(int)args[0]];
+        CharacterConfig config = (CharacterConfig)args[0];
 
         View view = e.AddComponentFromPool<View>();
         view.Load(config.prefab);
         view.gameObject.name = config.name;
 
-        e.AddComponentFromPool<Velocity>().value = Vector3.one * config.moveSpeed;
+        e.AddComponentFromPool<Velocity>().value = config.moveSpeed;
 
         e.AddComponentFromPool<MovePath>();
 

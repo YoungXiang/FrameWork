@@ -25,12 +25,14 @@ public class AStarPathFinding
 
         openSet.Clear();
         closedSet.Clear();
+        
+        // 1. Add startGrid into open list
         openSet.Add(startGrid);
-
+        // 2. Enter while loop
         while(openSet.Count > 0)
         {
+            // 3. Find the minimum cost in the open list
             Grid currentGrid = openSet[0];
-            openSet.PopFront();
             /*
             for (int i = 0; i < openSet.Count; i++)
             {
@@ -40,25 +42,32 @@ public class AStarPathFinding
                     currentGrid = openSet[i];
                 }
             }
-            openSet.Remove(currentNode);
+            openSet.Remove(currentGrid);
             */
+            openSet.PopFront();
+            // 4. Add into the closed list
             closedSet.Add(currentGrid);
 
+            // 5. if current node is the target node, return.
             if (currentGrid == targetGrid)
             {
                 RetracePath(startGrid, targetGrid, outPath);
                 return;
             }
 
+            // 6. else, check the neighbours around the current node.
             world.GetNeighbours(currentGrid, neighbours);
             for (int i = 0; i < neighbours.Count; i++)
             {
                 Grid checkGrid = neighbours[i];
+                // 7. if the neighbor is not walkable or is already in the closed list, continue.
                 if (!checkGrid.walkable || closedSet.Contains(checkGrid))
                 {
                     continue;
                 }
 
+                // 8. else if is not in open list, then add it into the open list.
+                // 9. calculate the new cost of the neighbor
                 bool isInOpenSet = openSet.Contains(checkGrid);
                 int newCost = currentGrid.gCost + CalculateCost(currentGrid, checkGrid);
                 if (newCost < checkGrid.gCost || !isInOpenSet)

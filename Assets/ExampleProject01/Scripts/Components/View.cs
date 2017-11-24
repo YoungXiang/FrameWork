@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Artemis.Attributes.ArtemisComponentPool(
-    InitialSize= ComponentDefine.ComponentPoolSize, 
-    IsResizable=true, 
-    IsSupportMultiThread=true, 
-    ResizeSize=ComponentDefine.ResizeScale)]
+    InitialSize = ComponentDefine.ComponentPoolSize, 
+    IsResizable = true, 
+    IsSupportMultiThread = true, 
+    ResizeSize = ComponentDefine.ResizeScale)]
 public class View : Artemis.ComponentPoolable
 {
     public GameObject gameObject;
     public Transform transform;
     public string assetPath;
 
-    public View()
-    { }
+    public View() { }
 
     public View(string assetPath_)
     {
