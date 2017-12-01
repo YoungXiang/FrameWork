@@ -49,7 +49,7 @@ public class Main : MonoBehaviour
     void main()
     {
         Debug.Log(System.Environment.Version);
-
+        
         KeyCodeManager.Instance.PushKeyCodeEvent(KeyCode.Escape, () =>
         {
             Application.Quit();
