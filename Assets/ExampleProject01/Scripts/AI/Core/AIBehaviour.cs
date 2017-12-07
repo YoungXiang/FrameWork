@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Artemis;
 
 namespace FrameWork
 {
-    public class AIBehaviour : ScriptableObject, IHeapItem<AIBehaviour>
+    public class AIBehaviour : IHeapItem<AIBehaviour>
     {
         public AIRoutine[] routines;
+        protected int currentRoutine;
+
         // from 0 - 1;
         public float urgent;
         // can be break when urgent value is lower than
@@ -22,20 +25,50 @@ namespace FrameWork
             set { heapIndex = value; }
         }
 
-        public void AddFactor(string factor, float importance)
+        protected virtual void SetupBehaviour(AIBrain brain)
         {
 
         }
-
-        public void UpdateFactors()
+        
+        public virtual bool IsCanInterrupt()
         {
-
+            return urgent < escapeUrgentLimit;
         }
 
-        public void Execute(AIBrain brain)
+        #region StateMachine Control
+        public virtual void Enter(AIBrain brain)
         {
-
+            isRunning = true;
+            currentRoutine = 0;
         }
+
+        public virtual void Update(AIBrain brain)
+        {
+            if (currentRoutine < 0) return;
+
+            if (!routines[currentRoutine].isFinished)
+            {
+                routines[currentRoutine].Execute(brain, this);
+            }
+            else
+            {
+                currentRoutine++;
+                if (currentRoutine >= routines.Length)
+                {
+                    currentRoutine = -1;
+                }
+                else
+                {
+                    routines[currentRoutine].Start(brain, this);
+                }
+            }
+        }
+        
+        public virtual void Exit(AIBrain brain)
+        {
+            isRunning = false;
+        }
+        #endregion
 
         public int CompareTo(AIBehaviour other)
         {

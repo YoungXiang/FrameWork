@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.2f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -104,12 +102,18 @@
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Scripts\TBS_CameraMovement.cs" />
     <Compile Include="Assets\ExampleProject01\Downloaded\TornadoBanditsStudio\Low Poly Free Pack\Water\TBS_Water.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\AI\AISimpleBrain.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Behaviours\AttackBehaviour.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Behaviours\Routines\MoveToTargetRoutine.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\AI\Behaviours\Routines\NormalAttackRoutine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIBehaviour.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIBrain.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\AIRoutine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\AI\Core\Factor.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\BeTree\Core\BeNode.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\BeTree\Core\BeTree.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\ComponentDefine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\MovePath.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Components\SimpleEnemyAIComponent.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\Velocity.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\View.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Components\Weapon.cs" />
@@ -139,6 +143,7 @@
     <Compile Include="Assets\ExampleProject01\Scripts\Module\UIStateMachine\UITopBar\UITopBarIdle.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Scenes\MainScene.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\Systems\MoveSystem.cs" />
+    <Compile Include="Assets\ExampleProject01\Scripts\Systems\SimpleEnemyAISystem.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\TestPathFind.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldAssetDefine.cs" />
     <Compile Include="Assets\ExampleProject01\Scripts\World\EnvironmentGenerator\WorldGenerator.cs" />
@@ -452,9 +457,7 @@
     <Compile Include="Assets\Scripts\Framework\3rdParty\UniRx\Scripts\UnityWinRTBridge\Thread.cs" />
     <Compile Include="Assets\Scripts\Framework\3rdParty\UniRx\Scripts\UnityWinRTBridge\ThreadPoolScheduler_UnityWinRT.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\ACaching.cs" />
-    <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\AWWW.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Assets\Scripts\Framework\AssetManagement\ACaching\AWWW.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetBundleConfig.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetLoader.cs" />
     <Compile Include="Assets\Scripts\Framework\AssetManagement\AssetLoaderExtend.cs" />
@@ -541,6 +544,82 @@
     <Compile Include="Assets\Scripts\Framework\Utils\Threading\ThreadManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Threading\ThreadState\BytesState.cs" />
     <Compile Include="Assets\Scripts\Framework\Utils\Threading\WorkerThread.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Agent\Agent.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Agent\Context.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Attributs.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\CRC32.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\FileManager.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\LogManager.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Member.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Meta.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\MiniXml.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Operation.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Properties.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\RandomGenerator.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\Utils.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\socketconnect.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Base\socketconnect_base.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Attachments\AttachAction.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Attachments\Effector.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Attachments\Event.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Attachments\Precondition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\BehaviorTree.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\BehaviorTree_task.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Action.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Assignment.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Compute.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\End.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Noop.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Wait.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Waitforsignal.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Actions\Waitframes.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Compositestochastic.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Ifelse.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Parallel.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Referencebehavior.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Selector.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Selectorloop.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Selectorprobability.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Selectorstochastic.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Sequence.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Sequencestochastic.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Composites\Withprecondition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\And.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\Condition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\Conditionbase.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\False.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\Or.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Conditions\True.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\DecoratorIterator.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratoralwaysfailure.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratoralwaysrunning.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratoralwayssuccess.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorcount.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorcountlimit.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorfailureuntil.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorframes.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorlog.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorloop.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorloopuntil.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratornot.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorrepeat.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorsuccessuntil.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratortime.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\BehaviorTree\Nodes\Decorators\Decoratorweight.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\AlwaysTransition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\FSM.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\StartCondition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\State.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\TransitionCondition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\WaitState.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\WaitTransition.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\FSM\WaitframesState.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\HTN\AgentState.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\HTN\Method.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\HTN\Planner.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\HTN\PlannerTask.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\HTN\Task.cs" />
+    <Compile Include="Assets\Scripts\behaviac\runtime\Workspace.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ExampleProject01\Downloaded\BrokenVector\FreeLowPolyPack\readme.txt" />
@@ -549,6 +628,9 @@
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyUnlitShader.shader" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\license.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\readme.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\version.txt" />
     <None Include="Assets\StreamingAssets\AssetBundle\Windows\AssetManifest.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

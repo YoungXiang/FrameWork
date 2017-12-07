@@ -20,6 +20,8 @@ public class WaveManager
 
     public void Update()
     {
+        if (currentWave == null) return;
+        
         currentWave.Update();
         if (currentWave.IsWaveFinished())
         {

@@ -42,9 +42,5 @@ public class MoveSystem : EntityProcessingSystem
                 view.transform.position += moveDir * vel.value * Time.deltaTime;
             }
         }
-        else
-        {
-            EntityWorldRegistry.Instance.gridWorld.FindPath(view.transform.position, path.dstPos, path.path);
-        }
     }
 }

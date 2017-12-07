@@ -31,9 +31,11 @@ public class MovePath : Artemis.ComponentPoolable
         path = new List<Grid>();
     }
 
-    public void SetDstPos(Vector3 dstPos_)
+    public void FindPath(Vector3 srcPos_, Vector3 dstPos_)
     {
         dstPos = dstPos_;
+        currentIndex = 0;
+        EntityWorldRegistry.Instance.gridWorld.FindPath(srcPos_, dstPos_, path);
     }
 
     public override void CleanUp()

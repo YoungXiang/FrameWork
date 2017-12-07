@@ -175,6 +175,9 @@
     <None Include="Assets\ExampleProject01\Res\_Scenes\Shaders\LowPolyUnlitShader.shader" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateMachineTemplate.txt" />
     <None Include="Assets\Scripts\Framework\Editor\StateMachineEditor\StateTemplate.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\license.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\readme.txt" />
+    <None Include="Assets\Scripts\behaviac\runtime\version.txt" />
     <None Include="Assets\StreamingAssets\AssetBundle\Windows\AssetManifest.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

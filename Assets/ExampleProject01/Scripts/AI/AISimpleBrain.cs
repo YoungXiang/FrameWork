@@ -11,13 +11,7 @@ public class AISimpleBrain : AIBrain
 {
     protected override int FindNextBehaviour()
     {
-        if (cur >= 0)
-        {
-            if (behaviours[cur].isRunning)
-            {
 
-            }
-        }
 
         return 0;
     }

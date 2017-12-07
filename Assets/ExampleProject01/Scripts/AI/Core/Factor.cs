@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Factor : MonoBehaviour {
+namespace FrameWork
+{
+    public class Factor
+    {
+        public virtual void Update()
+        {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        }
+    }
 }

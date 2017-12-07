@@ -39,8 +39,24 @@ namespace FrameWork
     }
     */
 
-    public class AIRoutine : CustomYieldInstruction
+    /// <summary>
+    /// A routine is a sub state of a behaviour, but it also contains data.
+    /// e.g: A Find target routine should have a target data, that can be shared within the behaviour.
+    /// </summary>
+    public abstract class AIRoutine
     {
-        public override bool keepWaiting { get { return false; } }
+        public bool isFinished { get; set; }
+
+        public float urgentRate = 0.0f;
+
+        public virtual void Start(AIBrain brain, AIBehaviour behaviour)
+        {
+            isFinished = true;
+        }
+        public abstract void Execute(AIBrain brain, AIBehaviour behaviour);
+        public virtual void Stop(AIBrain brain, AIBehaviour behaviour)
+        {
+            isFinished = false;
+        }
     }
 }
