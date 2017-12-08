@@ -5,5 +5,6 @@ using FrameWork;
 
 public class SimpleEnemyAIComponent : Artemis.Interface.IComponent
 {
+    public int targetId = -1;
 
 }
